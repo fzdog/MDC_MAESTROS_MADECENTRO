@@ -1,0 +1,370 @@
+﻿<div id="wrapper"
+     class="toggled"
+     style="-webkit-box-shadow: rgba(0, 0, 0, 0.9) 1px 9px 44px;">
+
+    <nav ng-hide="ocultarFiltros.value"
+         class="navbar-default navbar-side animated fadeInLeft"
+         role="navigation" style="
+    width: 353px;box-shadow: inset 0 0px 0 rgba(255, 255, 255, .15), 0 0px 0px rgba(0, 0, 0, .075);border-radius: 0px;">
+        <div class="sidebar-collapse">
+
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div style=" text-align: -webkit-center;">
+                        <h3 class="texto-titulos"
+                            style="font-size: 19px;">
+                            Filtros
+                        </h3>
+                    </div>
+                    <div>
+                        <label class="control-label texto-titulos">
+                            <input type="checkbox"
+                                   id="centroOperacionFiltro"
+                                   style="transform: scale(1.8); margin:5px"
+                                   ng-model="obj_filtro.sw_centro_operacion"
+                                   class="ng-pristine ng-valid ng-touched"
+                                   ng-change="enableDisablePropertiesSwActive('selectCentroOperacionFiltro', obj_filtro.sw_centro_operacion)">
+                            Centro operación:
+                        </label>
+                        <select class="form-control"
+                                id="selectCentroOperacionFiltro"
+                                ng-options=" opc.c_centro_operacion as opc.d_centro_operacion for opc in array_get_centros_operacion"
+                                ng-model="obj_filtro.c_centro_operacion"
+                                ng-disabled="obj_ctrl.disable_centroOperacionFiltro">
+                            <option value="">
+                                Seleccione
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="control-label texto-titulos">
+                            Grupo:
+                        </label>
+                        <select class="form-control"
+                                ng-options=" opc.c_grupo_referencia as opc.d_grupo_referencia for opc in array_get_grupos_productos"
+                                ng-model="obj_filtro.c_grupo_referencia">
+                            <option value="">
+                                Seleccione
+                            </option>
+                        </select>
+                    </div>
+                    <br /><br />
+
+                    <div>
+                        <div style="text-align: center;"
+                             tooltip-trigger="mouseenter"
+                             tooltip-placement="top"
+                             tooltip="Buscar ">
+                            <button ng-click="get_meses_inventario_cgrupo_and_or_co()"
+                                    type="button"
+                                    class="hvr-glow btn btn-warning"
+                                    style="background-color: #F68414;">
+                                <span style="font-size: 17px;position: relative;text-align: -webkit-right;margin-top: 3px"
+                                      class="fa fa-search"></span>
+                                <span style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;font-size: 16px;">
+                                    Consultar
+                                </span>
+                            </button>
+                        </div>
+                        <!--<div style="float: right;margin-top: -37px;"
+                             ng-click="LimpiarFiltros()">
+                            <img tooltip-trigger="mouseenter"
+                                 tooltip-placement="top"
+                                 tooltip="Limpiar los filtros"
+                                 src="Assets/img/cleanData.png"
+                                 width="35"
+                                 style="cursor: pointer;  -webkit-box-shadow: rgba(132, 123, 123, 0.882353) 3px 4px 9px;border-radius: 50px" tabindex="0">
+                        </div>-->
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div id="page-wrapper"
+         style="margin: 0 0 0 355px;padding: 1px 1px;">
+        <div id="page-inner"
+             style="border-left: 1px solid #DDDDDD;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-back noti-box">
+
+                        <div class="panel panel-default">
+
+                            <div class="margin-bottom">
+                                <div>
+                                    <div class="col-sm-8 col-sm-offset-4">
+
+                                        <div class="col-sm-8">
+                                            <h4>
+                                                Meses de inventario sugerido
+                                            </h4>
+
+                                            <i class="fa fa-plus-circle fa-2x"
+                                               style="float: right; color: #FF8805; margin-top:-37px; cursor:pointer"
+                                               ng-click="cloneInformation(obj_data,'NEW_ALL','ModalAddItemMesesInv')"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="top"
+                                               tooltip="Adicionar item "></i>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <hr style="border: 1.5px solid #CAC8C8;" />
+                            <div class="panel-body" style=" margin-top: 60px;">
+                                <!--==============================-->
+                                <div>
+                                    <h3 ng-show="obj_ctrl.viewCentroOperacion">
+                                        {{obj_filtro.d_centro_operacion}}
+                                    </h3>
+                                    <table class="table table-striped table-bordered table-hover"
+                                           style="margin-top: 20px"
+                                           st-table="array_get_meses_inventario_cgrupo_and_or_co"
+                                           ng-if="array_get_meses_inventario_cgrupo_and_or_co.length > 0">
+                                        <thead>
+                                            <tr style="text-align: center">
+                                                <th width="40%">
+                                                    Grupo
+                                                </th>
+                                                <th width="30%">
+                                                    Clasificación
+                                                </th>
+                                                <th width="20%">
+                                                    Meses inventario
+                                                </th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in array_get_meses_inventario_cgrupo_and_or_co">
+                                                <td>
+                                                    {{item.d_grupo}}
+                                                </td>
+                                                <td>
+                                                    <!--<div>
+                                                        <select class="form-control"
+                                                                ng-model="item.clasificacion_referencia"
+                                                                ng-options=" opc.clasificacion_referencia as opc.clasificacion_referencia for opc in array_clasificacion">
+                                                            <option value="">
+                                                                Seleccione
+                                                            </option>
+                                                            <option ng-repeat="item.array_clasificacion">
+                                                                {{item.clasificacion_referencia}}
+                                                            </option>
+                                                        </select>
+
+                                                    </div>-->
+                                                    {{item.clasificacion_referencia}}
+                                                </td>
+                                                <td id="meses_inv">
+                                                    <!--<input onlynumbers type='text'
+                                                    class="form-control"
+                                                    ng-model="item.meses_inventario"
+                                                    ng-blur=" validar_meses_inv(item)">-->
+                                                    {{item.meses_inventario}}
+
+                                                    <i class="fa fa-pencil-square-o fa-2x"
+                                                       style="float:right; color: #FF8805; cursor:pointer"
+                                                       ng-click="cloneInformation(item,'EDIT','ModalAddItemMesesInv')"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="top"
+                                                       tooltip="Editar ">
+                                                    </i>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot style="background-color: white;">
+                                            <tr>
+                                                <td colspan="13"
+                                                    class="text-center"
+                                                    style="background: rgb(239, 239, 239);">
+                                                    <div st-pagination=""
+                                                         st-items-by-page="10"
+                                                         st-displayed-pages="10"
+                                                         st-template="Assets/VendorReferences/smartTable/pagination.custom.html">
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!--=============================================-->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div id="guardar-cambios" class="hvr-grow" ng-click="update_meses_inv()">
+                <i popover="Guardar cambios"
+                   popover-trigger="mouseenter"
+                   class="glyphicon glyphicon-floppy-saved"
+                   style="color: white;font-size: 36px;"></i>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+
+
+<div class="modal fade"
+     id="ModalAddItemMesesInv"
+     role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        ng-click="cerrar_modal_insertar_bodega();">
+                    &times;
+                </button>
+                <h3 class="modal-title">
+                    Meses de inventario sugerido
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid"
+                     style="background: white">
+                    <form name="formulario_crear_cargo">                        
+                        <div class="form-group row">
+
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <label class="control-label texto-titulos">
+                                        <input type="checkbox"
+                                               id="swCentroOperacionData"
+                                               style="transform: scale(1.8); margin:5px"
+                                               ng-model="obj_data.sw_centro_operacion"
+                                               class="ng-pristine ng-valid ng-touched"
+                                               ng-change="enableDisablePropertiesSwActive('selectCentroOperacionData', obj_data.sw_centro_operacion)"
+                                               ng-disabled="obj_ctrl.disableAll">
+                                        Incluir centro de operación:
+                                    </label>
+                                </div>
+
+                                <div class="col-md-12"
+                                     ng-disable="obj_ctrl.disable_centroOperacionData"
+                                     ng-show="obj_data.sw_centro_operacion">
+                                    <label class="control-label texto-titulos">
+                                        Centro operación:
+                                    </label>
+                                    <select class="form-control"
+                                            id="selectCentroOperacionData"
+                                            ng-options=" opc.c_centro_operacion as opc.d_centro_operacion for opc in array_get_centros_operacion"
+                                            ng-model="obj_data.c_centro_operacion"
+                                            ng-disabled="obj_ctrl.disableAll || obj_ctrl.disable_centroOperacionData ">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="control-label texto-titulos">
+                                        Grupo:
+                                    </label>
+                                    <!--<select class="form-control"
+                                            ng-options=" opc.c_grupo_referencia as opc.d_grupo_referencia for opc in array_get_grupos_productos"
+                                            ng-model="obj_data.c_grupo_referencia">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>-->
+                                    <select class="form-control"
+                                            ng-options=" opc.c_grupo_referencia as opc.d_grupo_referencia for opc in array_get_grupos_productos"
+                                            ng-model="obj_data.c_grupo_referencia"
+                                            ng-disabled="obj_ctrl.disableAll "
+                                            id="selectGrupoReferencia">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label texto-titulos">
+                                        Clasificación:
+                                    </label>
+                                    <select class="form-control"
+                                            ng-model="obj_data.clasificacion_referencia"
+                                            ng-options=" opc.clasificacion_referencia as opc.clasificacion_referencia for opc in array_clasificacion"
+                                            id="selectClasificacion"
+                                            ng-disabled="obj_ctrl.disableAll ">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                        <option ng-repeat="item.array_clasificacion">
+                                            {{item.clasificacion_referencia}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="control-label texto-titulos">
+                                        Meses inventario:
+                                    </label>
+                                    <input onlynumbers type='text'
+                                           class="form-control"
+                                           ng-model="obj_data.meses_inventario"
+                                           ng-blur=" validateMonthsInventory()">
+                                </div>
+                            </div>
+
+                            <div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="align-center ">
+                            <button type="button"
+                                    class="hvr-glow btn btn-warning"
+                                    ng-click="insert_meses_inventario_grupo_referencia();"
+                                    aria-label="left Align"
+                                    style="background: #f68414">
+                                <span class="glyphicon glyphicon-floppy-disk"
+                                      style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px"
+                                      title="Guardar"
+                                      aria-hidden="false">
+                                </span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">
+                                    Guardar
+                                </span>
+                            </button>
+                            <!--<button type="button"
+                                    class="hvr-glow btn btn-warning"
+                                    aria-label="Left Align"
+                                    style="background-color: #F68414;"
+                                    ng-click="closeModal();">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px"
+                                      title=" Cerrar"
+                                      class="glyphicon glyphicon-minus-sign "
+                                      aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp Cancelar &nbsp&nbsp&nbsp&nbsp&nbsp
+                                </span>
+                            </button>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal"
+                        ng-click="cerrar_modal_insertar_bodega();">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

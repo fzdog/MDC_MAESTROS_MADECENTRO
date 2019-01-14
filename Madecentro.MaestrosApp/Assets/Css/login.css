@@ -1,0 +1,67 @@
+/**
+ * Created by Jose Daniel Estrada.
+ * email:  jdanieldim1801@gmail.com 
+ */
+.font-madecentro {
+    font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif !important;
+}
+
+#container-center,
+.container-center {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    display: table;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(6, 0, 0, 0.36);
+}
+
+#general-container {
+    position: relative;
+    overflow: auto;
+    z-index: 1;
+    background: url(../img/fondo_madera.png);
+    height: 100%;
+    background-size: 73%;
+}
+
+#bodyRegister {
+    position: relative;
+    z-index: 1;
+    margin: 128px auto;
+}
+
+.login-logo {
+    font-size: 35px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 300;
+}
+
+.ico-logo-madecentro {
+    background-image: url(../img/ico-logo-madecento.png);
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+    display: block;
+    margin-left: 21%;
+    padding: 10%;
+    background-size: contain;
+    cursor: context-menu !important;
+}
+
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+    #general-container {
+        position: initial;
+        overflow: auto;
+        z-index: 1;
+        background: url(../img/fondo_madera.jpg);
+    }
+
+    #bodyRegister {
+        position: relative !important;
+        z-index: 1 !important;
+        margin: 57px auto !important;
+    }
+}

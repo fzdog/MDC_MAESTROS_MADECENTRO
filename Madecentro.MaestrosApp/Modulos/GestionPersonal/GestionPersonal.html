@@ -1,0 +1,1214 @@
+﻿<div class="row" style=" background: white; box-shadow: rgba(0, 0, 0, 0.9) 1px 9px 24px !important; padding-top: 15px; padding-bottom: 15px;">
+    <div class="form-group padding-left-right-15px">
+        <button ng-click="RedirectTo('/Maestros');" type="button" class="close close-frm-posiciones"style="margin-top: 0;">
+            <span aria-hidden="true">×</span>
+        </button>
+        <button id="menu-toggle" type="button" class="btn btn-mdc" ng-click="openMenu()">
+            <span style="font-size: 25px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Buscar persona" class="glyphicon glyphicon-search"></span>
+        </button>
+        <button type="button" class="btn btn-mdc" ng-click="LimpiarCampos(crearUsuario=1)">
+            <span style="font-size: 28px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Nueva persona" class="fa fa-user-plus"></span>
+        </button>
+    </div>
+    <div class="form-group">
+        <div id="wrapperPL" class="toggled">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapperPL" style="padding-top: 15px; max-height: 625px;">
+                <div class="padding-left-right-15px">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-9">
+                                <input id="input_find_person" name="input_find_person" placeholder="Ingrese cédula o nombres" class="form-control" type="text" ng-model="filtroPersona">
+                                <span id="searchclearUsuario" class="glyphicon glyphicon-remove"></span>
+                            </div>
+                            <div class="col-sm-3 ">
+                                <button ng-disabled="filtroPersona == ''" ng-click="buscarEmpleado()" type="button" class="btn btn-mdc">
+                                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-search"></span>
+                                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Buscar</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             style="padding-left: 15px; padding-right: 15px;">
+                            
+                            <table class="table table-striped table-condensed table-bordered"
+                                   ng-if="ArrayDatosEmpleado.length > 0"
+                                   st-table="ArrayDatosEmpleado"
+                                   style="margin-top: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th st-sort="cedula">
+                                            <span title="Documento">Documento</span>
+                                        </th>
+                                        <th st-sort="primer_nombre">
+                                            <span title="Nombres del cliente">Nombres</span>
+                                        </th>
+                                        <th st-sort="primer_apellido">
+                                            <span title="Apellidos del cliente">Apellidos</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor: pointer;" ng-repeat="option in ArrayDatosEmpleado track by $index" ng-click="cargarPersona(option)">
+                                        <td>
+                                            <span title="Documento">{{option.cedula | number:0}}</span>
+                                        </td>
+                                        <td>
+                                            <span title="Nombres de la persona">{{option.primer_nombre}} {{option.segundo_nombre}}</span>
+                                        </td>
+                                        <td>
+                                            <span title="Apellidos de la persona">{{option.primer_apellido}} {{option.segundo_apellido}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#sidebar-wrapperPL -->
+            <!-- Page Content -->
+            <div id="page-content-wrapperPL" style="border-left: 1px solid #D7D7D7;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <form>
+                            <fieldset ng-disabled="objGestionEmpleados.sw_empleado_retirado" id="myFieldset">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Cédula:</label>
+                                            <input id="ced_persona" x-validacion-auto="solo_numeros" ng-disabled="modificar.value" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.cedula" ng-blur="validar_existencia_cedula()" format="number">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div ng-show="showFoto.value">
+                                                <a tooltip-trigger="mouseenter" tooltip-placement="bottom" tooltip="Foto personal" ng-href="{{fotoPersona}}" download style="margin-right: 10px;">
+                                                    <img id="imagen_personal" ng-src="{{fotoPersona}}" class="foto-persona">
+                                                </a>
+                                                <!--envio el identificador de que archivo quiero eliminar FOTO PERSONA: FP-->
+                                                <i tooltip-trigger="mouseenter" tooltip-placement="bottom" tooltip="Eliminar" class="fa fa-times" style="font-size: 23px; color: #de7d2b;" ng-click="eliminarArchivo('FP')"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Primer nombre:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.primerNombre" style="text-transform: uppercase">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos" style="padding-left: 0px;">Segundo nombre:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.segundoNombre" style="text-transform: uppercase">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Primer apellido:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.primerApellido" style="text-transform: uppercase">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos" style="padding-left: 0px;">Segundo apellido:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.segundoApellido" style="text-transform: uppercase">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos ">Fecha nacimiento:</label>
+                                            <div class='input-group date' id='dtFhNacimiento'>
+                                                <input id="fhSalida" type='text' class="form-control" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos" style="padding-left: 0px;">Celular:</label>
+                                            <input x-validacion-auto="solo_numeros" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.celular">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos" style="padding-left: 0px;">Teléfono residencia:</label>
+                                            <input x-validacion-auto="solo_numeros" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.telefono">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label  texto-titulos" style="padding-left: 0px;">Dirección residencia:</label>
+                                            <input id="escogerDireccion" readonly size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.direccion" ng-click="isCollapsed_Direccion = !isCollapsed_Direccion" style="cursor: pointer; background-color: white;">
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Género:</label>
+                                        <br />
+                                        <input type="radio" name="sex" value="F" ng-model="objGestionEmpleados.genero" style="-webkit-transform: scale(1.5);">&nbsp;Femenino&nbsp;
+                                        <input type="radio" name="sex" value="M" ng-model="objGestionEmpleados.genero" style="-webkit-transform: scale(1.5);">&nbsp;Masculino&nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label texto-titulos" style="padding-left: 0px;">Email personal:</label>
+                                        <input size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.emailPersonal" style="text-transform: lowercase;">
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos" style="padding-left: 0px;">Grado de Escolaridad:</label>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <select class="form-control" 
+                                                            ng-model="objGestionEmpleados.c_nivel_educativo" 
+                                                            ng-options="item.c_nivel as item.d_nivel for item in list_niveles_educacion">
+                                                        <option value="">Seleccione</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <select class="form-control" 
+                                                            ng-model="objGestionEmpleados.c_detalle_nivel_academico" 
+                                                            ng-options="item.c_detalle_nivel_academico as item.d_detalle_nivel_academico for item in list_dt_niveles_educacion">
+                                                        <option value="">Seleccione</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label  texto-titulos" style="padding-left: 0px;">Estado civil:</label>
+                                            
+                                            <select class="form-control" 
+                                                    ng-model="objGestionEmpleados.c_estado_civil" 
+                                                    ng-options="item.c_estado_civil as item.d_estado_civil for item in list_estados_civiles">
+                                                <option value="">Seleccione</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos">Compañia:</label>
+                                            <select id="" class="form-control" ng-model="objGestionEmpleados.c_compania">
+                                                <option selected value="">Seleccione compañia</option>
+                                                <option ng-repeat="items in ArrayCompanias" ng-selected="items.seleccionado" value="{{items.c_compania}}">{{items.d_compania}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div ng-show="objGestionEmpleados.c_compania==idCompaniaAspirante.value">
+                                                <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Fecha registro:</label>
+                                                <div class='input-group date' id='dtFhRegistro'>
+                                                    <input id="" type='text' class="form-control" />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div ng-hide="objGestionEmpleados.c_compania==idCompaniaAspirante.value">
+                                                <label class="control-label texto-titulos label_required">Fecha de ingreso:</label>
+                                                <div class='input-group date' id='dtFhIngreso'>
+                                                    <input id="fhSalida" type='text' class="form-control" />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div ng-hide="objGestionEmpleados.c_compania==idCompaniaAspirante.value">
+                                                <label class="control-label texto-titulos ">Posición:</label>
+                                                <div class='input-group'>
+                                                    <input readonly="true" size="30" id="inputPlaza" type="text" aria-required="true" class="form-control" title="{{objGestionEmpleados.plaza}}" ng-model="objGestionEmpleados.plaza">
+                                                    <span ng-hide="objGestionEmpleados.sw_empleado_retirado" class="input-group-addon" ng-click="buscarPlaza(isCollapsed = !isCollapsed)" style="border: 0px solid #ccc; background-color: #de7d2b; color: white;">
+                                                        <span class="glyphicon glyphicon-search"></span>
+                                                    </span>
+                                                    <span ng-hide="objGestionEmpleados.plaza == '' || objGestionEmpleados.sw_empleado_retirado || objGestionEmpleados.plaza == null" ng-click="ConfirmacionEliminarPlazaEmpleado()" tooltip-trigger="mouseenter" tooltip-placement="bottom" tooltip="Eliminar posición {{objGestionEmpleados.plaza}} del empleado" class="input-group-addon" style="border: 0px solid #ccc; background-color: #de7d2b; color: white; border-left: 1px solid #D46900;">
+                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div ng-hide="objGestionEmpleados.c_compania==idCompaniaAspirante.value">
+                                                <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Tipo contrato:</label>
+                                                <select class="form-control" ng-options="item.c_tipo_contrato as item.d_tipo_contrato for item in ArrayTiposContratos" ng-model="tipoContratoEmpleado">
+                                                    <option value="">Seleccione contrato</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div ng-show="modificar.value && objGestionEmpleados.c_compania!=idCompaniaAspirante.value">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Fecha Registro:</label>
+                                            <input disabled size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.fechaRegistro">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="font-size: medium;">Contacto familiar</div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos" style="padding-left: 0px;">Nombres:</label>
+                                                        <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.nombres_contacto_familiar" style="text-transform: uppercase">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos" style="padding-left: 0px;">Teléfono:</label>
+                                                        <input x-validacion-auto="solo_numeros" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionEmpleados.telefono_contacto_familiar">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--BUSQUEDA DE PLAZAS DISPONIBLES-->
+                                <div class="row" style="padding-left: 15px; padding-right: 15px">
+                                    <div class="panel panel-default" ng-show="isCollapsed">
+                                        <div class="panel-heading">
+                                            <span class="fa fa-street-view" style="font-size: 21px;"></span>
+                                            <label class="panel-title control-label texto-titulos">Consulta de posiciónes</label>
+                                        </div>
+                                        <div class="panel-body" style="padding-top: 15px;">
+                                            <div class="container-fluid">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+
+                                                        <div class="col-sm-6">
+                                                            <div class="margin-bottom" style="margin-bottom: 34px;">
+                                                                <label class="control-label texto-titulos">Gerencia:<span style="color: red">*</span></label>
+                                                                <select id="seleccion_Gerencias" class="form-control">
+                                                                    <option></option>
+                                                                    <option ng-selected="items.selected" ng-repeat="items in ArrayGerencias" value="{{items}}">{{items.DescripcionArea}}</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="margin-bottom">
+                                                                <label class="control-label texto-titulos">Cargos:</label>
+                                                                <select id="seleccion_Cargos" class="form-control">
+                                                                    <option></option>
+                                                                    <option ng-selected="items.selected" ng-repeat="items in ArrayCargos" value="{{items}}">{{items.d_cargo}}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="margin-bottom">
+                                                                <div>
+                                                                    <label class="control-label texto-titulos">Centro operativo:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">(Ingrese el número ó el nombre)</span>
+                                                                    <div class='input-group'>
+                                                                        <input type='text' class="form-control" ng-model="filtro_centro_operacion" />
+                                                                        <span class="input-group-addon" style="border: 0px solid #ccc; background-color: #de7d2b; color: white; cursor: pointer;" ng-click="getCentroOperacion_filtro();">
+                                                                            <!--CentroOperacion.abierto = !CentroOperacion.abierto-->
+                                                                            <span class="glyphicon glyphicon-search"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <accordion close-others="oneAtATime">
+                                                                        <accordion-group is-open="CentroOperacion.abierto">
+                                                                            <table class="table table-striped table-condensed table-bordered" st-table="listaPersonas" style="margin-top: 0px;">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th st-sort="DocumentoCliente">
+                                                                                            <span title="Documento">ID CO</span>
+                                                                                        </th>
+                                                                                        <th st-sort="NombresCliente">
+                                                                                            <span title="Nombres del cliente">Centro Operación</span>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr style="cursor: pointer;" ng-repeat="option in ArrayCentroOperativo track by $index" ng-click="cargarCO(option)">
+                                                                                        <td>
+                                                                                            <span title="Documento" class="ng-binding">{{option.c_centro_operacion}}</span>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <span title="Nombres de la persona">{{option.d_centro_operacion}}</span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </accordion-group>
+                                                                    </accordion>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="margin-bottom">
+
+                                                                <div>
+                                                                    <label class="control-label texto-titulos">Centro costos:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">(Ingrese el número ó el nombre)</span>
+                                                                    <div class='input-group'>
+                                                                        <input type='text' class="form-control" ng-model="filtro_idCentroCostos" />
+                                                                        <span class="input-group-addon" style="border: 0px solid #ccc; background-color: #de7d2b; color: white; cursor: pointer;" ng-click="getCentroCostos_filtro();">
+                                                                            <!--CentroCostos.abierto = !CentroCostos.abierto-->
+                                                                            <span class="glyphicon glyphicon-search"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <accordion close-others="oneAtATime">
+                                                                        <accordion-group is-open="CentroCostos.abierto">
+                                                                            <table class="table table-striped table-condensed table-bordered" st-table="listaPersonas" style="margin-top: 0px;">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th st-sort="DocumentoCliente">
+                                                                                            <span title="Documento">ID CC</span>
+                                                                                        </th>
+                                                                                        <th st-sort="NombresCliente">
+                                                                                            <span title="Nombres del cliente">Centro Costos</span>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr style="cursor: pointer;" ng-repeat="option in ArrayCentrosCostos track by $index" ng-click="cargarCC(option)">
+                                                                                        <td>
+                                                                                            <span title="Documento" class="ng-binding">{{option.f284_id}}</span>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <span title="Nombres de la persona">{{option.f284_descripcion}}</span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </accordion-group>
+                                                                    </accordion>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" style="text-align: -webkit-center;">
+                                                        <button ng-click="filtrarPlazas()" type="button" class="hvr-glow btn btn-mdc" style="background-color: #de7d2b;">
+                                                            <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="fa fa-check-circle"></span>
+                                                            <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Consultar</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="form-group" style="padding-right: 15px; padding-left: 15px;">
+                                                        <table class="table table-striped table-condensed table-bordered" st-table="listaPersonas" style="margin-top: 0px;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th st-sort="DescripcionPlaza">
+                                                                        <span>Descripcion posición</span>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                                <tr style="cursor: pointer;" ng-repeat="option in ArrayplazasDisponibles track by $index" ng-click="SeleccionarPlaza(option)">
+                                                                    <td>
+                                                                        <span title="Descripcion" class="ng-binding">{{option.descripcionPlaza}}</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="5" class="text-center">
+                                                                        <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--BUSQUEDA DE PLAZAS DISPONIBLES-->
+                                </div>
+                                <div class="row" style="padding-left: 15px; padding-right: 15px">
+                                    <!--INGRESO DE DIRECCIONES-->
+                                    <div collapse="isCollapsed_Direccion">
+                                        <div class="well well-lg" style="background-image: linear-gradient(to bottom, #ffffff 0%, #fdfdfd 0%); border: 1px solid #CDCDCD; ">
+                                            <div class="container-fluid">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <div class="form-group" style="padding-right: 15px;">
+                                                            <button title="Cerrar ingreso de direcciones" ng-click="isCollapsed_Direccion = !isCollapsed_Direccion" type="button" class="close" style="color: #de7d2b; opacity: 1; font-size: 27px;">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label texto-titulos">Pais:<sup>*</sup></label>
+                                                            <select id="select_pais" class="form-control font-madecentro font-size-15px" ng-options="p.id as p.descripcion for p in lista_pais" ng-model="pais_global" ng-change="SetDepartamentos(pais_global)">
+                                                                <option value="">Seleccione pais</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label texto-titulos">Departamento:<sup>*</sup></label>
+                                                            <select class="form-control font-madecentro font-size-15px" ng-options="d.id_departamento as d.d_departamento for d in lista_departamento" ng-model="departamento_global" ng-change="SetCiudades(departamento_global)">
+                                                                <option value="">Seleccione departamento</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label class="control-label texto-titulos">Municipio:<sup>*</sup></label>
+                                                            <select ng-change="get_nombre_ciudad(municipio_global)" class="form-control font-madecentro font-size-15px" ng-options="m.id_minicipio as m.d_municipio for m in lista_municipio" ng-model="municipio_global">
+                                                                <option value="">Seleccione municipio</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row text-center">
+                                                    <legend class="font-madecentro encabezado_legend">Dirección</legend>
+                                                    <!--<div class="bs-callout bs-callout-info font-madecentro">
+                                                        <h4>Nota</h4>
+                                                        <p>
+                                                            Los campos marcados con (<sup>*</sup>) deben ser numéricos.
+                                                        </p>
+                                                    </div>-->
+                                                    <div class="form-inline">
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="tipoVia1"></label>
+                                                            <select id="tipoVia1" name="tipoVia1" class="form-control font-madecentro font-size-15px" size="1" ng-model="objDireccion.tv1" ng-change="RefrescarDireccion()" style="width: 134px;">
+                                                                <option value="" selected="selected">Seleccione...</option>
+                                                                <option value="AV">Avenida </option>
+                                                                <option value="BLV">Bulevar </option>
+                                                                <option value="CL">Calle </option>
+                                                                <option value="CR">Carrera </option>
+                                                                <option value="CRT">Carretera </option>
+                                                                <option value="CIR">Circular </option>
+                                                                <option value="CRV">Circunvalar </option>
+                                                                <option value="DG">Diagonal </option>
+                                                                <option value="TV">Transversal </option>
+                                                                <option value="TC">Troncal </option>
+                                                                <option value="VT">Variante </option>
+                                                                <option value="VI">Vía </option>
+                                                                <option value="CRG">Corregimiento</option>
+                                                                <option value="KM">Kilómetro</option>
+                                                                <option value="VRD">Vereda</option>
+                                                                <option value="AUT">Autopista </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="nVia1"></label>
+                                                            <div class="input-group">
+                                                                <input x-validacion-auto="solo_numeros" ng-model="objDireccion.nV1" tooltip-trigger="mouseenter" tooltip-placement="bottom" tooltip=" Este campo debe ser numerico! " class="form-control font-madecentro font-size-15px" type="text" id="nVia1" name="nVia1" size="1" ng-keypress="validarNumeric($event)" ng-blur="RefrescarDireccion()" ng-change="RefrescarDireccion()" maxlength="3">
+                                                                <div class="input-group-addon" style="padding-left: 5px; padding-right: 5px;">
+                                                                    <!--<sup>*</sup>-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="apendice1"></label>
+                                                            <select id="apendice1" name="apendice1" class="form-control font-madecentro font-size-15px" ng-model="objDireccion.ap1" ng-change="RefrescarDireccion()">
+                                                                <option value="" selected="selected">Seleccione...</option>
+                                                                <option value="A">A </option>
+                                                                <option value="AA">AA </option>
+                                                                <option value="AB">AB </option>
+                                                                <option value="AC">AC </option>
+                                                                <option value="AD">AD </option>
+                                                                <option value="AE">AE </option>
+                                                                <option value="AF">AF </option>
+                                                                <option value="AG">AG </option>
+                                                                <option value="AH">AH </option>
+                                                                <option value="B">B </option>
+                                                                <option value="BB">BB </option>
+                                                                <option value="BA">BA </option>
+                                                                <option value="BC">BC </option>
+                                                                <option value="BD">BD </option>
+                                                                <option value="BE">BE </option>
+                                                                <option value="BF">BF </option>
+                                                                <option value="BG">BG </option>
+                                                                <option value="BH">BH </option>
+                                                                <option value="C">C </option>
+                                                                <option value="CC">CC </option>
+                                                                <option value="CA">CA </option>
+                                                                <option value="CB">CB </option>
+                                                                <option value="CD">CD </option>
+                                                                <option value="CE">CE </option>
+                                                                <option value="CF">CF </option>
+                                                                <option value="CG">CG </option>
+                                                                <option value="CH">CH </option>
+                                                                <option value="D">D </option>
+                                                                <option value="DD">DD </option>
+                                                                <option value="DA">DA </option>
+                                                                <option value="DB">DB </option>
+                                                                <option value="DC">DC </option>
+                                                                <option value="DE">DE </option>
+                                                                <option value="DF">DF </option>
+                                                                <option value="DG">DG </option>
+                                                                <option value="DH">DH </option>
+                                                                <option value="E">E </option>
+                                                                <option value="EE">EE </option>
+                                                                <option value="EA">EA </option>
+                                                                <option value="EB">EB </option>
+                                                                <option value="EC">EC </option>
+                                                                <option value="ED">ED </option>
+                                                                <option value="EF">EF </option>
+                                                                <option value="EG">EG </option>
+                                                                <option value="EH">EH </option>
+                                                                <option value="F">F </option>
+                                                                <option value="FF">FF </option>
+                                                                <option value="FA">FA </option>
+                                                                <option value="FB">FB </option>
+                                                                <option value="FC">FC </option>
+                                                                <option value="FD">FD </option>
+                                                                <option value="FE">FE </option>
+                                                                <option value="FG">FG </option>
+                                                                <option value="FH">FH </option>
+                                                                <option value="G">G </option>
+                                                                <option value="GG">GG </option>
+                                                                <option value="GA">GA </option>
+                                                                <option value="GB">GB </option>
+                                                                <option value="GC">GC </option>
+                                                                <option value="GD">GD </option>
+                                                                <option value="GE">GE </option>
+                                                                <option value="GF">GF </option>
+                                                                <option value="GH">GH </option>
+                                                                <option value="H">H </option>
+                                                                <option value="HH">HH </option>
+                                                                <option value="HA">HA </option>
+                                                                <option value="HB">HB </option>
+                                                                <option value="HC">HC </option>
+                                                                <option value="HD">HD </option>
+                                                                <option value="HE">HE </option>
+                                                                <option value="HF">HF </option>
+                                                                <option value="HG">HG </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="cardinalidad1"></label>
+                                                            <select id="cardinalidad1" name="cardinalidad1" class="form-control font-madecentro font-size-15px" ng-model="objDireccion.ca1" ng-change="RefrescarDireccion()">
+                                                                <option value="" selected="selected">Seleccione...</option>
+                                                                <option value="BIS">BIS</option>
+                                                                <option value="ESTE ">Este </option>
+                                                                <option value="NORTE ">Norte </option>
+                                                                <option value="OESTE ">Oeste </option>
+                                                                <option value="SUR ">Sur </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group" style="text-align: center;">
+                                                            <span style="font-size: 16px;">#</span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="nVia2"></label>
+                                                            <div class="input-group">
+                                                                <input x-validacion-auto="solo_numeros" ng-model="objDireccion.nV2" tooltip-placement="bottom" tooltip=" Este campo debe ser numerico! " class="form-control font-madecentro font-size-15px" id="nVia2" type="text" name="nVia2" size="1" ng-blur="RefrescarDireccion()" ng-change="RefrescarDireccion()" maxlength="3">
+                                                                <div class="input-group-addon" style="padding-left: 5px; padding-right: 5px;">
+                                                                    <!--<sup>*</sup>-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="apendice2"></label>
+                                                            <select id="apendice2" name="apendice2" class="form-control font-madecentro font-size-15px" ng-model="objDireccion.ap2" ng-change="RefrescarDireccion()">
+                                                                <option value="" selected="selected">Seleccione...</option>
+                                                                <option value="A">A </option>
+                                                                <option value="AA">AA </option>
+                                                                <option value="AB">AB </option>
+                                                                <option value="AC">AC </option>
+                                                                <option value="AD">AD </option>
+                                                                <option value="AE">AE </option>
+                                                                <option value="AF">AF </option>
+                                                                <option value="AG">AG </option>
+                                                                <option value="AH">AH </option>
+                                                                <option value="B">B </option>
+                                                                <option value="BB">BB </option>
+                                                                <option value="BA">BA </option>
+                                                                <option value="BC">BC </option>
+                                                                <option value="BD">BD </option>
+                                                                <option value="BE">BE </option>
+                                                                <option value="BF">BF </option>
+                                                                <option value="BG">BG </option>
+                                                                <option value="BH">BH </option>
+                                                                <option value="C">C </option>
+                                                                <option value="CC">CC </option>
+                                                                <option value="CA">CA </option>
+                                                                <option value="CB">CB </option>
+                                                                <option value="CD">CD </option>
+                                                                <option value="CE">CE </option>
+                                                                <option value="CF">CF </option>
+                                                                <option value="CG">CG </option>
+                                                                <option value="CH">CH </option>
+                                                                <option value="D">D </option>
+                                                                <option value="DD">DD </option>
+                                                                <option value="DA">DA </option>
+                                                                <option value="DB">DB </option>
+                                                                <option value="DC">DC </option>
+                                                                <option value="DE">DE </option>
+                                                                <option value="DF">DF </option>
+                                                                <option value="DG">DG </option>
+                                                                <option value="DH">DH </option>
+                                                                <option value="E">E </option>
+                                                                <option value="EE">EE </option>
+                                                                <option value="EA">EA </option>
+                                                                <option value="EB">EB </option>
+                                                                <option value="EC">EC </option>
+                                                                <option value="ED">ED </option>
+                                                                <option value="EF">EF </option>
+                                                                <option value="EG">EG </option>
+                                                                <option value="EH">EH </option>
+                                                                <option value="F">F </option>
+                                                                <option value="FF">FF </option>
+                                                                <option value="FA">FA </option>
+                                                                <option value="FB">FB </option>
+                                                                <option value="FC">FC </option>
+                                                                <option value="FD">FD </option>
+                                                                <option value="FE">FE </option>
+                                                                <option value="FG">FG </option>
+                                                                <option value="FH">FH </option>
+                                                                <option value="G">G </option>
+                                                                <option value="GG">GG </option>
+                                                                <option value="GA">GA </option>
+                                                                <option value="GB">GB </option>
+                                                                <option value="GC">GC </option>
+                                                                <option value="GD">GD </option>
+                                                                <option value="GE">GE </option>
+                                                                <option value="GF">GF </option>
+                                                                <option value="GH">GH </option>
+                                                                <option value="H">H </option>
+                                                                <option value="HH">HH </option>
+                                                                <option value="HA">HA </option>
+                                                                <option value="HB">HB </option>
+                                                                <option value="HC">HC </option>
+                                                                <option value="HD">HD </option>
+                                                                <option value="HE">HE </option>
+                                                                <option value="HF">HF </option>
+                                                                <option value="HG">HG </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="cardinalidad2"></label>
+                                                            <select id="cardinalidad2" name="cardinalidad2" class="form-control font-madecentro font-size-15px" ng-model="objDireccion.ca2" ng-change="RefrescarDireccion()">
+                                                                <option value="" selected="selected">Seleccione...</option>
+                                                                <option value="BIS">BIS</option>
+                                                                <option value="ESTE ">Este </option>
+                                                                <option value="NORTE ">Norte </option>
+                                                                <option value="OESTE ">Oeste </option>
+                                                                <option value="SUR ">Sur </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="nPlaca"></label>
+                                                            <input x-validacion-auto="solo_numeros" ng-model="objDireccion.pl" tooltip-placement="bottom" tooltip=" Este campo debe ser numerico! " class="form-control font-madecentro font-size-15px" type="text" id="nPlaca" name="nPlaca" size="1" ng-blur="RefrescarDireccion()" ng-change="RefrescarDireccion()" maxlength="4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row text-center">
+                                                    <legend class="font-madecentro encabezado_legend">Complemento</legend>
+                                                    <div class="form-inline">
+                                                        <div class="form-group">
+                                                            <label class="sr-only" for="complemento"></label>
+                                                            <input placeholder="Ejemplo: AP 401" x-validacion-auto="direccion" ng-model="objDireccion.compl" class="form-control font-madecentro font-size-15px" type="text" id="complemento" name="complemento" size="40" ng-blur="RefrescarDireccion()" maxlength="36">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row text-center">
+                                                    <legend class="font-madecentro encabezado_legend" style="padding: 15px;">{{direccionResult}}</legend>
+                                                </div>
+                                                <div class="row text-center">
+                                                    <button type="button" class="btn btn-mdc" ng-click="getDireccion()">
+                                                        <span style="position: relative; text-align: -webkit-right; margin-top: 3px" title="Cerrar" class="glyphicon glyphicon-ok"></span>
+                                                        <span class="font-madecentro">OK</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="checkbox">
+                                <label class="control-label texto-titulos">
+                                    <input type="checkbox" ng-model="objGestionEmpleados.sw_derecho_dotacion" style=" transform: scale(1.5); cursor: pointer;"> Derecho a dotación
+                                </label>
+                            </div>
+                                <div class="checkbox">
+                                    <label class="control-label texto-titulos">
+                                        <input type="checkbox" ng-model="objGestionEmpleados.sw_bono_dotacion" style=" transform: scale(1.5); cursor: pointer;"> Bono de dotación
+                                    </label>
+                                </div>
+                                <!--DOTACION-->
+                                <div class="panel panel-default" ng-hide="objGestionEmpleados.c_compania==idCompaniaAspirante.value || !objGestionEmpleados.sw_derecho_dotacion">
+                                    <div class="panel-heading">
+                                        <span class="fa fa-plus-circle" style="font-size: 21px;"></span>
+                                        <label class="panel-title control-label texto-titulos">Dotación</label>
+                                    </div>
+                                    <div class="panel-body" style="padding-top: 15px;">
+                                        <div>
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <label class="control-label texto-titulos">
+                                                                            <input type="checkbox" ng-model="objGestionEmpleados.sw_derecho_chaqueta" style="transform: scale(1.5); cursor: pointer;" ng-click="objGestionEmpleados.c_talla_chaqueta=''"> Derecho a chaqueta
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Cantidad de camisas:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                    <div class="form-inline">
+                                                                        <div class="input-group" style="display: flex">
+                                                                            <select id="" class="form-control" ng-model="objGestionEmpleados.cantidad_camisas">
+                                                                                <option value="">Seleccione una cantidad</option>
+                                                                                <option value="2">2</option>
+                                                                                <option value="3">3</option>
+                                                                            </select>
+                                                                            <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.cantidad_camisas=''"><i class="fa fa-paint-brush"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label texto-titulos" style="padding-left: 0px;">Talla camisa:</label>
+                                                                        <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                        <div class="form-inline">
+                                                                            <div class="input-group" style="display: flex">
+                                                                                <select id="" class="form-control" ng-model="objGestionEmpleados.c_talla_camisa">
+                                                                                    <option value="">Seleccione una talla de camisa</option>
+                                                                                    <optgroup label="Tallas mujeres">
+                                                                                        <option value="6">6</option>
+                                                                                        <option value="8">8</option>
+                                                                                        <option value="10">10</option>
+                                                                                        <option value="12">12</option>
+                                                                                        <option value="14">14</option>
+                                                                                        <option value="16">16</option>
+                                                                                        <option value="18">18</option>
+                                                                                        <option value="20">20</option>
+                                                                                        <option value="22">22</option>
+                                                                                    </optgroup>
+                                                                                    <optgroup label="Tallas hombres">
+                                                                                        <option value="XS">XS</option>
+                                                                                        <option value="S">S</option>
+                                                                                        <option value="M">M</option>
+                                                                                        <option value="L">L</option>
+                                                                                        <option value="XL">XL</option>
+                                                                                        <option value="XXL">XXL</option>
+                                                                                        <option value="XXXL">XXXL</option>
+                                                                                    </optgroup>
+                                                                                </select>
+                                                                                <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_talla_camisa=''"><i class="fa fa-paint-brush"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label texto-titulos" style="padding-left: 0px;">Talla chaleco:</label>
+                                                                        <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                        <div class="form-inline">
+                                                                            <div class="input-group" style="display: flex">
+                                                                                <select id="" class="form-control" ng-model="objGestionEmpleados.c_talla_chaleco">
+                                                                                    <option value="">Seleccione una talla de chaleco</option>
+                                                                                    <!--<optgroup label="Tallas mujeres">
+                                                                                        <option value="6">6</option>
+                                                                                        <option value="8">8</option>
+                                                                                        <option value="10">10</option>
+                                                                                        <option value="12">12</option>
+                                                                                        <option value="14">14</option>
+                                                                                        <option value="16">16</option>
+                                                                                        <option value="18">18</option>
+                                                                                        <option value="20">20</option>
+                                                                                        <option value="22">22</option>
+                                                                                    </optgroup>-->
+                                                                                    <optgroup label="Tallas hombres">
+                                                                                        <option value="28">28</option>
+                                                                                        <option value="30">30</option>
+                                                                                        <option value="32">32</option>
+                                                                                        <option value="34">34</option>
+                                                                                        <option value="36">36</option>
+                                                                                        <option value="38">38</option>
+                                                                                        <option value="40">40</option>
+                                                                                        <option value="42">42</option>
+
+                                                                                        <!--<option value="XS">XS</option>
+                                                                                        <option value="S">S</option>
+                                                                                        <option value="M">M</option>
+                                                                                        <option value="L">L</option>
+                                                                                        <option value="XL">XL</option>
+                                                                                        <option value="XXL">XXL</option>
+                                                                                        <option value="XXXL">XXXL</option>-->
+                                                                                    </optgroup>
+                                                                                </select>
+                                                                                <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_talla_chaleco=''"><i class="fa fa-paint-brush"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label  texto-titulos" style="padding-left: 0px;">Talla pantalón:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                    <div class="form-inline">
+                                                                        <div class="input-group" style="display: flex">
+                                                                            <select id="" class="form-control" ng-model="objGestionEmpleados.c_talla_pantalon">
+                                                                                <option value="">Seleccione una talla de pantalón</option>
+                                                                                <optgroup label="Tallas mujeres">
+                                                                                    <option value="6">6</option>
+                                                                                    <option value="8">8</option>
+                                                                                    <option value="10">10</option>
+                                                                                    <option value="12">12</option>
+                                                                                    <option value="14">14</option>
+                                                                                    <option value="16">16</option>
+                                                                                    <option value="18">18</option>
+                                                                                    <option value="20">20</option>
+                                                                                    <option value="22">22</option>
+                                                                                </optgroup>
+                                                                                <optgroup label="Tallas hombres">
+                                                                                    <option value="26">26</option>
+                                                                                    <option value="28">28</option>
+                                                                                    <option value="30">30</option>
+                                                                                    <option value="32">32</option>
+                                                                                    <option value="34">34</option>
+                                                                                    <option value="36">36</option>
+                                                                                    <option value="38">38</option>
+                                                                                    <option value="40">40</option>
+                                                                                    <option value="42">42</option>
+                                                                                    <option value="44">44</option>
+                                                                                </optgroup>
+                                                                            </select>
+                                                                            <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_talla_pantalon=''"><i class="fa fa-paint-brush"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Talla chaqueta:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                    <div class="form-inline">
+                                                                        <div class="input-group" style="display: flex">
+                                                                            <select ng-disabled="!objGestionEmpleados.sw_derecho_chaqueta" class="form-control" ng-model="objGestionEmpleados.c_talla_chaqueta">
+                                                                                <option value="">Seleccione una talla de chaqueta</option>
+                                                                                <optgroup label="Tallas mujeres">
+                                                                                    <option value="8">8</option>
+                                                                                    <option value="10">10</option>
+                                                                                    <option value="12">12</option>
+                                                                                    <option value="14">14</option>
+                                                                                </optgroup>
+                                                                                <optgroup label="Tallas hombres">
+                                                                                    <option value="32">32</option>
+                                                                                    <option value="34">34</option>
+                                                                                    <option value="36">36</option>
+                                                                                    <option value="38">38</option>
+                                                                                    <option value="40">40</option>
+                                                                                </optgroup>
+                                                                            </select>
+                                                                            <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_talla_chaqueta=''"><i class="fa fa-paint-brush"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label  texto-titulos" style="padding-left: 0px;">Talla botas:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                    <div class="form-inline">
+                                                                        <div class="input-group" style="display: flex">
+                                                                            <select id="" class="form-control" ng-model="objGestionEmpleados.c_talla_zapatos">
+                                                                                <option value="">Seleccione una talla de zapatos</option>
+                                                                                <option value="34">34</option>
+                                                                                <option value="35">35</option>
+                                                                                <option value="36">36</option>
+                                                                                <option value="37">37</option>
+                                                                                <option value="38">38</option>
+                                                                                <option value="39">39</option>
+                                                                                <option value="40">40</option>
+                                                                                <option value="41">41</option>
+                                                                                <option value="42">42</option>
+                                                                                <option value="43">43</option>
+                                                                                <option value="44">44</option>
+                                                                                <option value="45">45</option>
+                                                                            </select>
+                                                                            <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_talla_zapatos=''"><i class="fa fa-paint-brush"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label  texto-titulos" style="padding-left: 0px;">Tipo camisa:</label>
+                                                                <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                <div class="form-inline">
+                                                                    <div class="input-group" style="display: flex">
+                                                                        <select class="form-control" ng-options="item.c_tipo_camisa as item.d_tipo_camisa for item in array_tipos_camisas" ng-model="objGestionEmpleados.c_tipo_camisa">
+                                                                            <option value="">Seleccione tipo de camisa</option>
+                                                                        </select>
+                                                                        <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_tipo_camisa=''"><i class="fa fa-paint-brush"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label  texto-titulos" style="padding-left: 0px;">Otro tipo camisa:</label>
+                                                                <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                <div class="form-inline">
+                                                                    <div class="input-group" style="display: flex">
+                                                                        <select class="form-control" ng-options="item.c_tipo_camisa as item.d_tipo_camisa for item in list_otros_tipos_camisa" ng-model="objGestionEmpleados.c_otro_tipo_camisa">
+                                                                            <option value="">Seleccione tipo de camisa</option>
+                                                                        </select>
+                                                                        <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_otro_tipo_camisa=''"><i class="fa fa-paint-brush"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label  texto-titulos" style="padding-left: 0px;">Tipo pantalón:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                    <div class="form-inline">
+                                                                        <div class="input-group" style="display: flex">
+                                                                            <select class="form-control" ng-options="item.c_tipo_pantalon as item.d_tipo_pantalon for item in array_tipos_pantalon" ng-model="objGestionEmpleados.c_tipo_pantalon">
+                                                                                <option value="">Seleccione tipo de pantalón</option>
+                                                                            </select>
+                                                                            <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_tipo_pantalon=''"><i class="fa fa-paint-brush"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label class="control-label  texto-titulos" style="padding-left: 0px;">Tipo botas:</label>
+                                                                    <span style="font-size: smaller; color: #9C9C9C;">si utiliza uniforme</span>
+                                                                    <div class="form-inline">
+                                                                        <div class="input-group" style="display: flex">
+                                                                            <select class="form-control" ng-options="item.c_tipo_bota as item.d_tipo_bota for item in list_tipos_botas" ng-model="objGestionEmpleados.c_tipo_bota">
+                                                                                <option value="">Seleccione tipo</option>
+                                                                            </select>
+                                                                            <span class="input-group-addon btn btn-default" style="color: black; background: white;" ng-click="objGestionEmpleados.c_tipo_bota=''"><i class="fa fa-paint-brush"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <hr/>
+                                                        <legend class="font-madecentro encabezado_legend">Dirección Dotación</legend>
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Centro operación</label>
+                                                                    <select id="seleccion_centro_operacion" class="form-control font-madecentro font_size_15px">
+                                                                        <option></option>
+                                                                        <option ng-repeat="items in listCentrosOperacionDireccion" value="{{items}}">{{items.d_centro_operacion}}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Dirección</label>
+                                                                    <input type="text" class="form-control" ng-model="objGestionEmpleados.direccion_dotacion">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label class="control-label texto-titulos" style="padding-left: 0px;">Departamento</label>
+                                                                <select class="form-control" ng-change="get_ciudades_depto_dotacion()" ng-options="item.c_depto as item.d_depto for item in listDeptos" ng-model="objGestionEmpleados.c_depto_dotacion">
+                                                                    <option value="">Seleccione Departamento</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="control-label texto-titulos" style="padding-left: 0px;">Ciudad</label>
+                                                                <select class="form-control" ng-options="item.c_ciudad as item.d_ciudad for item in listCiudades" ng-model="objGestionEmpleados.c_ciudad_dotacion">
+                                                                    <option value="">Seleccione Ciudad</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <div class="row text-center">
+                            <label class="control-label texto-titulos">Activo </label>
+                            <input class="chk_sw_activo_persona" ng-disabled="disable_ChkswActivo" type="checkbox" ng-model="objGestionEmpleados.swActivo" ng-change="validar_activacion_persona()">
+                        </div>
+                        <br />
+                        <!--retiro del empleado-->
+                        <div ng-show="modificar.value && objGestionEmpleados.swActivo && objGestionEmpleados.c_compania != idCompaniaAspirante.value && !objGestionEmpleados.sw_empleado_retirado" style="text-align: right; margin-top: -68px; padding-right: 15px;">
+                            <img src="Assets/img/retirar_empleado.png" class="archivos-adjuntos-reply" tooltip-trigger="mouseenter" tooltip-placement="top" tooltip="Retirar empleado" style="cursor: pointer; border-radius: 6px; margin-top: 13px;" ng-click="get_tipos_retiro();retirar_empleado.value=!retirar_empleado.value" />
+                        </div>
+                        <div class="row" style="padding-right: 15px; padding-left: 15px;">
+                            <div class="panel panel-default" ng-show="retirar_empleado.value">
+                                <div class="panel-heading">
+                                    <div>
+                                        <span class="fa fa-user-times" style="font-size: 21px;"></span>
+                                        <label class="panel-title control-label texto-titulos">Retiro de Empleado</label>
+                                    </div>
+                                    <div style="float: right; margin-top: -29px;">
+                                        <button class="btn btn-mdc" style="background-color: #de7d2b;" ng-click="retirar_empleado.value=false" ng-hide="objGestionEmpleados.sw_empleado_retirado">
+                                            Cancelar retiro
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="panel-body" style="padding-top: 15px;">
+                                    <div class="row">
+                                        <div style="padding-left: 15px; padding-right: 15px;">
+                                            <div class="" ng-hide="objGestionEmpleados.sw_empleado_retirado">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos label_required">Fecha de retiro:</label>
+                                                        <div class='input-group date' id='dtFhRetiro'>
+                                                            <input type='text' class="form-control" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos label_required">Motivo de retiro:</label>
+                                                        <select class="form-control" ng-options="retiro.c_tipo_retiro as retiro.d_tipo_retiro for retiro in array_tipos_retiro" ng-model="objGestionEmpleados.c_tipo_retiro"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos ">Ingrese el motivo de retiro:</label>
+                                                        <textarea class="form-control" style="margin-bottom: 13px; resize: none; height: 112px;" ng-model="objGestionEmpleados.d_motivo_retiro"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-show="objGestionEmpleados.sw_empleado_retirado">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos ">Fecha de retiro:</label>
+                                                        <div class='input-group date'>
+                                                            <input disabled type='text' class="form-control" ng-model="objGestionEmpleados.fhRetiro" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos ">Motivo de retiro:</label>
+                                                        <input disabled type='text' class="form-control" ng-model="objGestionEmpleados.d_tipo_retiro" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label texto-titulos ">Motivo de retiro:</label>
+                                                        <textarea disabled="true" class="form-control" style="margin-bottom: 13px; resize: none; height: 140px;" ng-model="objGestionEmpleados.d_motivo_retiro"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <!--archivos adjuntos-->
+                            <div style="border-top: 1px solid #A9A9A9; margin-bottom: 26px;">
+                                <h3 class="encabezados-info col-sm-offset-5" style="width: 200px;">Archivos adjuntos</h3>
+                            </div>
+                            <div class="row margin-bottom">
+                                <div class="col-sm-3" ng-show="!showFoto.value">
+                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Foto:</label>
+                                    <input id="inputImagenPersona" type="file" accept="image/*" class="file-loading">
+                                </div>
+                                <div class="col-sm-4" ng-show="!showHV.value">
+                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Adjuntar hoja de vida:</label>
+                                    <input id="inputHojaVida" type="file" multiple class="file-loading">
+
+                                </div>
+                                <div class="col-sm-4" hidden="true">
+                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Adjuntar libreta militar:</label>
+                                    <input id="inputLibretaMilitar" type="file" multiple class="file-loading">
+                                </div>
+                                <div class="col-sm-4" hidden="true">
+                                    <label class="control-label texto-titulos" style="padding-left: 0px;">Adjuntar registro civil de nacimiento:</label>
+                                    <input id="inputRegistroCivilNacimiento" type="file" multiple class="file-loading" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="row margin-bottom" style="display: -webkit-inline-box;">
+                                <div class="divisor"></div>
+                                <div ng-show="showHV.value">
+                                    <a tooltip-trigger="mouseenter" tooltip-placement="bottom" tooltip="Hoja de vida" ng-href="{{hojaVida_link}}" download style="margin-right: 10px;">
+                                        <img ng-src="{{hojaVida}}" class="archivos-adjuntos-reply">
+                                    </a>
+                                    <!--envio el identificador de que archivo quiero eliminar HOJA DE VIDA: HV-->
+                                    <i tooltip-trigger="mouseenter" tooltip-placement="bottom" tooltip="Eliminar" class="fa fa-times" style="font-size: 23px; color: #de7d2b;" ng-click="eliminarArchivo('HV')"></i>
+                                </div>
+                            </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapperPL -->
+    </div>
+    <div class="text-center">
+        <div ng-show="crear.value && !modificar.value">
+            <!--GUARDAR-->
+            <button type="button" class="btn btn-mdc" ng-click="GuardarPersona();">
+                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-floppy-disk"></span>
+                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Guardar</span>
+            </button>
+            <!--CANCELAR-->
+            <!--<button type="button" class="btn btn-mdc" ng-click="CloseModal();">
+                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-minus-sign "></span>
+                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Cerrar</span>
+            </button>-->
+        </div>
+        <div ng-show="modificar.value">
+            <!--MODIFICAR-->
+            <button ng-disabled="objGestionEmpleados.sw_empleado_retirado" type="button" class="btn btn-mdc" ng-click="ModificarPersona();">
+                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-floppy-disk"></span>
+                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Modificar</span>
+            </button>
+            <!--CANCELAR-->
+            <!--<button type="button" class="btn btn-mdc" ng-click="CloseModal();">
+                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-minus-sign "></span>
+                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Cerrar</span>
+            </button>-->
+        </div>
+    </div>
+</div>

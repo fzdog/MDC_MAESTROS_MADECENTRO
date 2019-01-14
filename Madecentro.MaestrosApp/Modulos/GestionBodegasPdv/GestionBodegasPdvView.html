@@ -1,0 +1,166 @@
+﻿<!---- =============================================
+-- Author:		<Elkin Gutierrez Crespo>
+--              <24/08/2016>
+-- Description:	<App Gestion Cargos>
+-- Compañia:    <Madecentro Colombia S.A.S >
+-- =============================================-->
+
+<div class="container ng-scope" style="background-color: white; box-shadow: rgba(0, 0, 0, 0.9) 1px 25px 45px; padding: 0;">
+    <div style="margin-bottom: 20px">
+        <h3 class="panel-heading-apps font-madecentro ng-binding" align="center">Gestion Bodegas Pdv</h3>
+        <br />
+        <br />
+
+        <div class="col-lg-12" align="center">
+            <div align="center">
+                <label class="texto-titulos">Centro de operación</label>
+                <br />
+                <div class="col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4">
+                    <select id="select_co" class="form-control" ng_model="obj_consultar_co.centro_operacion" ng-change="consultar_bodegas()" autofocus="autofocus">
+                        <option value="" disabled selected hidden>Seleccione CO...</option>
+                        <option ng-repeat="items in array_consultar_co" ng-selected="items.selected" value="{{items.c_centro_operacion}}">{{items.d_centro_operacion}}</option>
+                    </select>
+                    <!--<div class="col-lg-12 margin-bottom">
+                        <br />-->
+                    <!--<button type="button" class="hvr-glow btn btn-warning" ng-show="show_btn_cancelar==1" aria-label="Left Align" style="background-color: #F68414;" ng-click="limpiar_co();">
+                        <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                        <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Cancelar</span>
+                    </button>-->
+                    <!--<button type="button" id="btn_buscar" ng-show="show_bnt_buscar==0" class="hvr-glow btn btn-warning" aria-label="left Align" ng-click="consultar_bodegas();" style="background: #f68414">
+                        <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Buscar" class="glyphicon glyphicon-search" aria-hidden="false">
+                        </span>
+                        <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">&nbsp Buscar</span>
+                    </button>-->
+                    <!--</div>-->
+
+                </div>
+            </div>
+        </div> <div class="col-xs-offset-8 col-xs-2 col-sm-offset-8 col-sm-2 text-right" style="text-align:right" ng-show="show_btn_agregar_bodega==1">
+            <a popover="Agregar bodegas" popover-trigger="mouseenter" class="hi-icon fa-plus-square" aria-hidden="true" ng-click="consultar_lista_bodegas()" data-toggle="modal" data-target="#modal_insertar_bodega"></a>
+        </div>
+        <div ng-show="show_tabla==1">
+
+            <!--{{obj_consultar_co.centro_operacion}}
+            {{obj_consultar_co.bodega}}
+            {{obj_consultar.co_sw_activo}}
+            {{obj_modificar_bodega}}-->
+
+            <div class="bs-component col-sm-offset-2 col-sm-8" ng-controler="" ng-if="array_consultar_co.length > 0">
+                <table class="table table-condensed table-striped " ng-if="array_consultar_co.length > 0">
+                    <thead class="css_tabla_usu_sam_enc text-center">
+                        <tr>
+                            <th>
+                                Código
+                            </th>
+                            <th>
+                                Bodega
+                            </th>
+                            <th>
+                                Activo
+                            <th>
+                                Última modificación
+                            </th>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <th>
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th colspan="8">
+                                <input type="text" ng-model="filtro_buscar" class="form-control" aria-hidden="true" placeholder="Buscar...." />
+                            </th>
+                        </tr>
+                        <!--style="cursor: pointer" es opcional paara cuando se haga click en la tabla-->
+                        <tr ng-repeat="item in array_insertar_bodega|filter: filtro_buscar" class="ng-scope" ng-click="">
+
+                            <td class="align-center">{{item.bodega}} </td>
+                            <td>{{item.f150_descripcion}} </td>
+                            <td class="align-center">
+                                <input type="checkbox" ng-change="show_guardar_cambios=1"
+                                       ng-model="item.sw_activo" style="transform: scale(1.8)" />
+                            </td>
+                            <td style="text-align:justify">{{item.UserName}}<br />{{item.fh_ultima_modificacion  | dateFormatDateWithMoment }}</td>
+
+                            <td>
+                                <div class="col-xs-1 col-xs-offset-1 col-md-offset-1" align="center">
+                                    <div id="btn_guardar_cambios" style="display: block">
+                                        <a popover=" Guardar Cambios"
+                                           ng-click="modificar_estado_bodega(item);show_guardar_cambios=0"
+                                           ng-show="show_guardar_cambios==1"
+                                           id="btn1" popover-trigger="mouseenter"
+                                           style="color: #f68414;" class="fa fa-floppy-o fa-2x" aria-hidden="True" data-toggle="modal" data-target="#modal_modificar_cargo"></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="8" class="text-center">
+                                <div st-pagination="" st-items-by-page="20" st-displayed-pages="10"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal_insertar_bodega" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="cerrar_modal_insertar_bodega();">&times;</button>
+                        <h3 class="modal-title">Agregar bodega</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid" style="background: white">
+                            <form name="formulario_crear_cargo">
+                                <!--//Insert Cargo Nuevo-->
+                                <div class="form-group row">
+
+                                    <div class="col-sm-offset-2 col-sm-8">
+                                        <label class="texto-titulos">Bodega</label>
+                                        <select id="select_lista_bodegas" class="form-control" ng_model="obj_consultar_co.bodega">
+                                            <option value="" disabled="disabled">Seleccione bodega...</option>
+                                            <option ng-repeat="items in array_lista_bodegas" ng-selected="items.selected" value="{{items.f150_id}}">{{items.f150_descripcion}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xs-offset-6 align-center ">
+                                    <button type="button" class="hvr-glow btn btn-warning"
+                                            ng-click="insertar_bodega();"
+                                            aria-label="left Align" style="background: #f68414">
+                                        <span class="glyphicon glyphicon-floppy-disk" style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Agregar Bodega" aria-hidden="false">
+                                        </span>
+                                        <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Agregar Bodega</span>
+                                    </button>
+                                    <button type="button" class="hvr-glow btn btn-warning"
+                                            aria-label="Left Align" style="background-color: #F68414;"
+                                            ng-click="cerrar_modal_insertar_bodega();">
+                                        <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                                        <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">&nbsp&nbsp&nbsp&nbsp&nbsp Cancelar &nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cerrar_modal_insertar_bodega();">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <br /><br /><br /><br /><br /><br /><br /><br />
+</div>
+
+
+
+

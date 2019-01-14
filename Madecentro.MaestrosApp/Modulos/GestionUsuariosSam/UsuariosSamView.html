@@ -1,0 +1,246 @@
+﻿
+<div class="container">
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal_gestion_usuarios_sam" role="dialog" style="top:0px;background-color: rgba(155, 155, 155, 0.819608); ">
+        <div class="modal-dialog modal-lg">
+
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="RedirectTo('/Maestros');">&times;</button>
+                    <h3 class="modal-title text-center" style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;">Gestión usuarios SAM</h3>
+             
+                  </div>
+                <br />
+                <br />
+               
+           
+                <!--cuerpo del modal-->
+                <div class="modal-body">
+                    <!--buscar usuario SAM-->
+                    <div class="form-group " style="margin-bottom: 50px;">
+                 
+                        <div class="col-sm-6" style="width: 29%;">
+                            <label class="control-label label_required" style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px; float: right;">Correo:</label>
+                           
+                          </div>
+                        <div class="col-sm-5">
+                            <input id="" size="90" type="text" class="form-control" ng-model="obj_usuario_sam.correo_usuario_sam" required style="text-transform: lowercase;">
+                         
+                        </div>
+                        <div class="col-sm-1">
+                            <button popover="Buscar Usuario" popover-trigger="mouseenter" type="button" class="submit-form-green btn-sm" ng-click="buscar_usuario_sam()" style="float: left; text-transform: none; width: auto; margin-left: -40px; display: initial; height: 34px; padding-top: 2px;">
+                                <i class="fa fa-search" style="font-size: 17px"></i>
+                            </button>
+                         
+                        </div>
+                    </div>
+                    <br/>
+             
+                    <br />
+                    <!--cuerpo del body-->
+                    <!--modificar-->
+                    <div class="form-group" ng-show="show_update_usuario ==1">
+                        <hr style="border: 2px solid rgba(159, 163, 163, 0.47); border-radius: 200px /8px; height: 0px; text-align: center; " />
+                        <div class="form-group">
+                            
+                            <div class="col-sm-4">
+
+                                <!--seleccionar rol-->
+                                <label style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">Rol: </label>
+                                <select class="form-control" ng-options="opc.c_rol_id as opc.d_rol_id for opc in array_roles" ng-model="obj_update_usuario.c_rol_id" required>
+                                    <!--<option value="">Seleccione </option>-->
+                                </select>
+                            </div>
+
+                            <div class="col-sm-4" style="margin-left: 21px;">
+
+                                <label class="" style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">Centro Operativo: </label>
+                                <select id="mySelCO" class="form-group" ng-model="obj_add_sucursal.id_co" required style="width: 250px">
+                                    <option ng-repeat="items in objCentrosOperaciones.ArrayCentrosOperaciones" ng-selected="items.selected" value="{{items.c_centro_operacion}}">{{items.d_centro_operacion}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1">
+                                <!--guardar sucursal-->
+                                <button popover="Agregar sucursal" popover-trigger="mouseenter" type="button" class="submit-form-green btn-sm" ng-click="insert_sucursal()" style="float: left; text-transform: none; width: auto; margin-left: -25px; display: initial; height: 31px; padding-top: 2px; margin-top: 22px;">
+                                    <i class="fa fa-floppy-o" style="font-size: 17px"></i>
+                                </button>
+                            </div>
+                            <div class="col-sm-3" style="width: 22%;">
+
+                                <label style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">
+                                    <input type="checkbox" ng-model="obj_update_usuario.sw_activo"> Activo
+                                </label>
+
+                                <br/>
+
+                                <label style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">
+                                    <input type="checkbox" ng-model="obj_update_usuario.sw_vendedor_externo"> Vendedor externo
+                                </label>
+
+                                <br/>
+
+                                <label style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">
+                                    <input type="checkbox" ng-model="obj_update_usuario.sw_vendedor_ext_ppto"> Vendedor ext. Ppto
+                                </label>
+
+                            </div>
+
+
+                        </div>
+                        <br /><br /><br /><br/><br/><br/>
+
+
+
+                        <div class="" ng-show="show_tabla_sucursales==1" >
+
+                            <table class="css_tabla_usu_sam" st-table="array_sucursales_usuario" ng-if="array_sucursales_usuario.length >0">
+                                <!--style="width: 500px; margin-top: 70px; margin-left: 180px; border: 1px solid;"-->
+
+                                <thead class="css_tabla_usu_sam_enc">
+                                    <tr>
+                                        <th style="width: 50%" st-sort="d_centro_operacion">&nbsp;Nombre centro operativo</th>
+                                        <th style="width: 25%" st-sort="c_centro_operacion">Centro operativo</th>
+                                        <th style="width: 25%" st-sort="sw_activo">Activo</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th colspan="5"><input st-search="" class="form-control" style="font-family: cursive;  font-weight: 100; " placeholder="Buscar sucursal..." type="text" /></th>
+                                    </tr>
+                                    <tr ng-repeat="option in array_sucursales_usuario">
+                                        <td>{{option.d_centro_operacion}}</td>
+                                        <td>{{option.c_centro_operacion}}</td>
+                                        <td><input type="checkbox" ng-click="" ng-model="option.sw_activo" /></td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr >
+                                        <td colspan="13" class="text-center" style="background: rgb(239, 239, 239); text-align: center;">
+                                            <div st-pagination="" st-items-by-page="15" st-displayed-pages="15" st-template="Assets/VendorReferences/smartTable/pagination.custom.html"></div>
+                                        </td>
+                                    </tr>
+
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <br />
+                        <hr style="border: 2px solid rgba(159, 163, 163, 0.47); border-radius: 200px /8px; height: 0px; text-align: center; " />
+
+
+
+                    
+                        <br /><br /><br />
+                       
+                        <div class="form-group" style="margin-left: 300px; margin-top: -57px; ">
+                            <!--boton Modificar-->
+                            <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" ng-click="update_sw_sucursal();" style="background-color: #F68414;">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-floppy-disk" aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Modificar</span>
+                            </button>
+                            <!--<button ng-click="get_sucursales_usuario()">probar</button>-->
+                            <!--boton cerrar model-->
+                            <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" ng-click="cerrar_modal_ususarios_sam();" style="background-color: #F68414;">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Cerrar</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--insertar-->
+                    <div class="form-group" id="insertar_rol_usuario" ng-show="show_insert_usuario==1">
+                        {{obj_insert_usuario}}
+                        <br/>
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <!--seleccionar rol-->
+                                <label class="control-label label_required" style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">Rol: </label>
+                                <br/> <select class="form-control" ng-options="opc.c_rol_id as opc.d_rol_id for opc in array_roles" style="height: 27px; font-size: 11px" ng-model="obj_insert_usuario.rol">
+                                    <option value="">Seleccione </option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!--sw_activo-->
+                                <label class="control-label label_required" style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">
+                                    <input type="checkbox" ng-model="obj_insert_usuario.sw_activo"> Activo
+                                </label>
+                            </div>
+                            <div class="col-sm-3">
+                                <!--sw_vend_externo-->
+                                <label style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">
+                                    <input type="checkbox" ng-model="obj_insert_usuario.sw_vendedor_externo"> Vendedor externo
+                                </label>
+
+                            </div>
+                            <div class="col-sm-3">
+                                <!--sw_vend_externo-->
+                                <label style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">
+                                    <input type="checkbox" ng-model="obj_insert_usuario.sw_vendedor_ext_ppto"> Vendedor ext. Ppto
+                                </label>
+
+                            </div>
+
+                        </div>
+                        <br/><br/><br/>
+                        <br/>
+                        <!--select centro de operación-->
+                        <div class="col-sm-6">
+                            <label class="control-label label_required" style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px;">Centro Operativo: </label>
+                            <select id="co" class="form-group" ng-model="obj_add_sucursal.id_co" required style="width: 300px">
+                                <option ng-repeat="items in objCentrosOperaciones.ArrayCentrosOperaciones" ng-selected="items.selected" value="{{items.c_centro_operacion}}">{{items.d_centro_operacion}}</option>
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-group" style="margin-left: 300px; margin-top: 100px;">
+                            <!--boton GUARDAR-->
+                            <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" ng-click="insert_rol_usuario();" style="background-color: #F68414;">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-floppy-disk" aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Guardar</span>
+                            </button>
+                            <!--<button ng-click="insert_sucursal()">prueba insertar</button>-->
+                            <!--boton cerrar model-->
+                            <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" ng-click="cerrar_modal_ususarios_sam();" style="background-color: #F68414;">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Cerrar</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!--pie de pagina modal-->
+                <div id="botones_bd" class="modal-footer" style="margin-left: 50px; margin-top: 50px;">
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

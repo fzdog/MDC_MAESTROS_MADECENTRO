@@ -1,0 +1,170 @@
+﻿<!---- =============================================
+-- Author:		<Elkin Gutierrez Crespo>
+--              <30/09/2016>
+-- Description:	<App Autorizadores Mayor dcto >
+-- Compañia:    <Madecentro Colombia S.A.S >
+-- =============================================-->
+
+<div class="container" style="background-color: white; box-shadow: rgba(0, 0, 0, 0.9) 1px 25px 45px; padding: 0;">
+
+    <div id="container" class="col-md-12 " style="margin-bottom:10%; margin-top:1%">
+
+        <h3 class="panel-heading-apps font-madecentro ng-binding" align="center">Gestion presupuestos ventas mes PDV</h3>
+      
+        <div id="div_colunmna_consulta"class="col-md-4 col-md-offset-4" style="margin-bottom: 10%; margin-top: 3%; align-content: center; text-align: center">
+
+
+            <div id="div_select_co" style="text-align: center; margin-bottom: 10px">
+                <label class="texto-titulos" style="text-align:center">Selecione Centro de operación:</label>
+                <select id="select_co" class="form-control"
+                        ng-model="obj_datos.c_centro_operacion"
+                        ng-change="">
+                    <option value="" disabled selected hidden>Seleccione centro de operación...</option>
+                    <option ng-repeat="items in array_consultar_co" ng-selected="items.selected" value="{{items.c_centro_operacion}}">{{items.d_centro_operacion}}</option>
+
+                </select>
+            </div>
+            <div id="div_select_fecha" style=" margin-bottom:10px">
+                <label class="texto-titulos" style="text-align:center">Seleccione mes y año:</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control" id="datepickerAnio" style="text-align:center"
+                           ng-model="obj_datos.fecha" /> <!--obj_datos.ano-->
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom:30px" id="btn_consultar">
+                <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" style="background: #f68414"
+                        ng-click="consultar_presupuestos_co_mes_anio();consultar_presupuestos_co_anio_mes_a_mes()">
+                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-search" aria-hidden="false"></span>
+                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Consultar</span>
+                </button>
+            </div>
+
+
+            <hr />
+            <div id="div_presupuesto">
+                <div id="div_text_ppto_pdv" style=" margin-bottom:30px">
+                    <label class="texto-titulos" style="text-align:center">TOTAL PRESUPUESTO:</label>
+                    <input type="text" class="form-control" style="font-size: large; font-weight: bold; text-align: right" maxlength="19" id="text1"
+                           readonly
+                           x-validacion-auto="solo_numeros" format="number"
+                           ng-model="obj_datos.vr_presupuesto_pv">
+                </div>
+                <hr />
+                <div id="div_text_ppto_v_mostrador" style=" margin-bottom:15px">
+                    <label class=" texto-titulos" style="text-align:center">Presupuesto vendedores mostrador:</label>
+                    <input type="text" class="form-control" style="text-align:right" maxlength="18" id="text_ppto_mostrador"
+                           x-validacion-auto="solo_numeros" format="number"
+                           ng-model="obj_datos.vr_ppto_vendedor_mostrador"
+                           ng-change="calcular_presupuesto_pdv()">
+                    <span class="help-block has-feedback texto-titulos" id="id_span_mostrador" style="text-align:right"></span>
+
+                </div>
+                <div id="div_text_ppto_v_externos" style=" margin-bottom:15px">
+
+                    <label class="texto-titulos" style="text-align:center">Presupuesto vendedores externos:</label>
+                    <input type="text" class="form-control" maxlength="18"
+                           x-validacion-auto="solo_numeros" format="number" style="text-align:right"
+                           ng-model="obj_datos.vr_ppto_vendedor_externo"
+                           ng-change="calcular_presupuesto_pdv()">
+                    <span class="help-block has-feedback texto-titulos" id="id_span_externo" style="text-align:right"></span>
+
+                </div>
+                <div id="div_sw_activo" style="text-align:center">
+                    <label class="texto-titulos">Activo:</label>
+                    <input type="checkbox" class="form-control"
+                           ng-model="obj_datos.sw_activo">
+                </div>
+            </div>
+            <br /><br />
+            <div class="col-xs-12" id="div_button">
+                <div class="col-xs-6">
+                    <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" style="background-color: #F68414"
+                            ng-click="limpiar_campos()">
+                        <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                        <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Cancelar</span>
+                    </button>
+                </div>
+                <div class="col-xs-6">
+                    <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" style="background: #f68414"
+                            ng-click="insertar_presupuesto_mes()">
+                        <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-floppy-disk" aria-hidden="false"></span>
+                        <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Guardar</span>
+                    </button>
+                </div>
+            </div>
+            <br /><br /><br />
+            <div id="div_modificacion">
+                <label class="texto-titulos" style="text-align:center">Última modificación:</label>
+                <input type="text" class="form-control" readonly="readonly"
+                       ng-model="obj_datos.ultima_modificacion">
+            </div>
+
+
+        </div>
+      
+        <!-- tablas -->
+        <div id="div_tabla">
+            <div class="col-md-8">
+               <br /><br /><br /><br />
+                <!-- Tabla Permisos Usuario Grupo -->
+                <div class="bs-component col-sm-12" ng-controler="" ng-if="array_consulta_co_mes_a_mes.length > 0">
+                    <h3 class="panel-heading-apps font-madecentro ng-binding" align="center">Presupuestos del año: {{obj_datos.ano }}</h3>
+                    <table class="table table-condensed table-striped " ng-if="array_consulta_co_mes_a_mes.length > 0" align="center">
+                        <thead class="css_tabla_usu_sam_enc">
+                            <tr>
+                                <th align="center">
+                                    Mes
+                                </th>
+                                <th align="center">
+                                    Ppto V. Mosrador
+                                </th>
+                                <th align="center">
+                                    Ppto V. Externo
+                                </th>
+                                <th align="center">
+                                    Total Presupuesto
+                                </th>
+                                <th align="center">
+                                    Última Modificación
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th colspan="8">
+                                    <input type="text" ng-model="filtro_buscar" class="form-control" aria-hidden="true" placeholder="Buscar...." />
+                                </th>
+                            </tr>
+                            <tr ng-repeat="item in array_consulta_co_mes_a_mes|filter: filtro_buscar" class="ng-scope" ng-click="">
+                                <td align="center">{{item.mes}} </td>
+                                <td align="right">
+                                    <b>$  </b>{{item.vr_ppto_vendedor_mostrador | number}}
+                                </td>
+                                <td align="right">
+                                    <b>$  </b>{{item.vr_ppto_vendedor_externo | number}}
+                                </td>
+                                <td align="right">
+                                    <b>$  </b>{{item.vr_presupuesto_pv | number}}
+                                </td>
+                                <td align="justify">
+                               {{item.UserName}}<br />{{item.fh_ultima_modificacion | dateFormatDateWithMoment}}
+                                </td>
+                    </table>
+                    <br />
+                </div>
+                <!-- Tabla Permisos Usuario Linea -->
+              
+            </div>
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+

@@ -1,0 +1,131 @@
+﻿<div id="wrapper" class="toggled" style="-webkit-box-shadow: rgba(0, 0, 0, 0.9) 1px 9px 44px;">
+    <div id="page-inner" style="border-left: 1px solid #DDDDDD;">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="panel-heading-apps font-madecentro ng-binding" align="center">Gestion Super Ofertas</h3>
+
+                <div class="panel panel-back noti-box">
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+                            <!--==============================-->
+                            <!--Upload information csv-->
+                            <!--no mostrar-->
+                            <pre id="fileContents" rows="30" cols="150" ng-show="1==9999">{{objetoResultado}} </pre>
+
+
+                            <div class="col-md-4">
+                                <a href="assets/docs/Formato_gestion_superofertas_csv.csv">
+                                    <img style="text-align:center"
+                                         src="assets/img/Logo_-Excel-2013.png"
+                                         width="20"
+                                         height="20" />
+                                    Descargar formato
+                                    <i class="fa fa-download"></i>
+                                </a>
+
+                            </div>
+                            <div class="col-md-4" style="text-align:center">
+                                <!--Boton Eliminar Archivo-->
+                                <i class="fa fa-trash fa-2x"
+                                   style="text-align:center"
+                                   tooltip-trigger="mouseenter"
+                                   tooltip-placement="bottom"
+                                   tooltip="Eliminar archivo"
+                                   ng-if="arreglocsv.length > 0"
+                                   ng-click="deleteContent()">
+                                </i>
+                            </div>
+                            <!--Boton open file-->
+                            <div class="col-md-4">
+                                <input type="file"
+                                       id="openFile"
+                                       class="file"
+                                       accept=".csv" />
+                            </div>
+
+
+                            <table class="table table-striped table-bordered table-hover"
+                                   style="margin-top: 20px"
+                                   st-table="arreglocsv"
+                                   ng-if="arreglocsv.length > 0">
+                                <thead>
+                                    <tr class="center"
+                                        style="text-align: center">
+                                        <th>
+                                            Novedades
+                                        </th>
+                                        <th>
+                                            Referencia
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in arreglocsv">
+                                        <td>
+                                            <i class="fa fa-times-circle"
+                                               ng-show="item.sw_error"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="bottom"
+                                               tooltip="Error en registro"
+                                               style="color:red">
+                                            </i>
+                                            <br />
+                                            <i class="fa fa-trash fa-2x"
+                                               ng-show="item.sw_error"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="bottom"
+                                               tooltip="Eliminar item"
+                                               style="color:gray"
+                                               ng-click="deleteRow($index)">
+                                            </i>
+                                        </td>
+
+                                        <td style="text-transform: uppercase">
+                                            <b>
+                                                <i class="fa fa-times-circle"
+                                                   ng-show="item.sw_error_referencia_repetida"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="bottom"
+                                                   tooltip="Referencia repetida"
+                                                   style="color:red">
+                                                </i>
+                                                <i class="fa fa-times-circle"
+                                                   ng-show="item.sw_error_referencia"
+                                                   tooltip-trigger="mouseenter"
+                                                   tooltip-placement="bottom"
+                                                   tooltip="Error, la referencia no existe"
+                                                   style="color:red">
+                                                </i>
+                                                {{item.referencia}}
+                                            </b>
+                                            <br />
+                                            <span style="color:gray; font-size: small">{{item.descripcion_referencia}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="text-align: center;"
+                                 tooltip-trigger="mouseenter"
+                                 tooltip-placement="top"
+                                 tooltip="Guardar">
+                                <button ng-click="insert_gestion_super_oferta()"
+                                        ng-show="arreglocsv.length > 0"
+                                        type="button"
+                                        class="hvr-glow btn btn-warning">
+                                    <span style="font-size: 17px;position: relative;text-align: -webkit-right;margin-top: 3px"
+                                          class="fa fa-floppy-o"></span>
+                                    <span style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;font-size: 16px;">
+                                        Guardar
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
+

@@ -1,0 +1,414 @@
+﻿<!---- =============================================
+-- Author:		<Elkin Gutierrez Crespo>
+--              <13/09/2016>
+-- Description:	<App Autorizadores Mayor dcto >
+-- Compañia:    <Madecentro Colombia S.A.S >
+-- =============================================-->
+
+<div class="container-fluid" style="background: white; margin-top:30px; margin-bottom:3%">
+    <div style="margin-bottom: 20px">
+        <h3 class="panel-heading-apps font-madecentro ng-binding" align="center">Autorizadores Mayor Descuento</h3>
+        <br />
+        <div class="col-md-12 " align="center">
+
+            <!-- Cabecera de busqueda izquierda -->
+            <div class="col-lg-3" align="center">
+                <h4>Filtros</h4>
+                <div class="btn-group ng-scope" align="left" style="margin-bottom: 15px; display: inline-flex;">
+                    <label class="btn-xs btn btn-warning btns-categograma ng-untouched ng-valid ng-dirty" ng-model="radioModel" btn-radio="'zona'" ng-click="ver_consulta_zona()">
+                        Zona, Grupo, linea
+                    </label>
+                    <label class="btn-xs btn btn-warning btns-categograma ng-untouched ng-valid ng-dirty" ng-model="radioModel" btn-radio="'usuario'" ng-click="ver_consulta_usuario();">
+                        Usuario
+                    </label>
+                    <br />   <br />  <br />
+                </div>
+                <!-- Busquedas -->
+                <div>
+                    <!-- Busqueda por Zona, Grupo, Linea -->
+                    <div id="div_zonas" ng-show="show_div_zona==1">
+                        <div class="col-md-12 encabezado-categograma ng-scope" style="margin-bottom:10%">
+                            <label class="texto-titulos">Zona</label>
+                            <select id="select_zonas" class="form-control"
+                                    ng-model="obj_datos.zona_sucursal"
+                                    ng-change="ocultar_textarea();consultar_grupos()">
+                                <option value="" disabled selected hidden>Seleccione zona...</option>
+                                <option ng-repeat="items in array_lista_zonas" ng-selected="items.selected" value="{{items.id_zona}}">{{items.d_zona}}</option>
+                            </select>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid #999; border-bottom: 1px solid #333; height:0;" />
+                        <div class="col-md-12 encabezado-categograma ng-scope" style="margin-bottom:10%">
+                            <label class="texto-titulos">Grupo</label>
+                            <select id="select_grupos" class="form-control"
+                                    ng-model="obj_datos.grupo"
+                                    ng-change="ocultar_textarea();consultar_lineas()">
+                                <option value="" disabled selected hidden>Seleccione grupo...</option>
+                                <option ng-repeat="items in array_lista_grupos" ng-selected="items.selected" value="{{items.c_grupo}}">{{items.d_grupo}}</option>
+                            </select>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid #999; border-bottom: 1px solid #333; height:0;" />
+                        <div class="col-md-12 encabezado-categograma ng-scope" style="margin-bottom:10%">
+                            <label class=" texto-titulos align-center" ng-click="mostrar_select_linea()">
+                                Linea
+                            </label>
+                            <i style="color: #F68414;padding-top: 2px" class="pull-right glyphicon glyphicon-plus text-right" title="Mostrar filtro linea"
+                               ng-click="mostrar_select_linea()"
+                               id="ico_plus_linea">
+                            </i>
+                            <i style="color: #F68414;padding-top: 2px" class="pull-right glyphicon glyphicon-minus text-right" title="Ocultar filtro linea"
+                               ng-click="ocultar_select_linea()" 
+                               id="ico_minus_linea">
+                            </i>
+                            <div id="div_select_linea" ng-show="show_select_linea==1">
+                                <select id="select_lineas" class="form-control"
+                                        ng-model="obj_datos.linea"
+                                        ng-change="ocultar_textarea()">
+                                    <option value="" disabled selected hidden>Seleccione linea...</option>
+                                    <option ng-repeat="items in array_lista_lineas" ng-selected="items.selected" value="{{items.c_linea}}">{{items.d_linea}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="col-sm-12">
+                            <!--<div class="col-sm-6">
+                                <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" style="background-color: #F68414"
+                                        ng-click="limpiar_consulta_textarea()">
+                                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Limpiar xxx</span>
+                                </button>
+                            </div>-->
+                                                    <div class="col-sm-12">
+                                <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" style="background: #f68414"
+                                        ng-click="boton_busqueda_zonas_grupos_lineas()">
+                                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-search" aria-hidden="false"></span>
+                                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Buscar</span>
+                                </button>
+                                <br /><br /><br /><br />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Busqueda por Usuario -->
+                    <div id="div_usuario" ng-show="show_div_usuario==1" class="encabezado-categograma ng-scope" style="margin-top:10%">
+                        <div>
+                            <label class="texto-titulos">Buscar todos los permisos por usuario:</label>
+                            <div class="col-xs-11">
+                                <div class="form-group help-block " style="margin-bottom:10%">
+                                    <input id="txt_consultar_permisos_usuario"
+                                           ng-change="verificar_user_name('txt_consultar_permisos_usuario')"
+                                           ng-model="obj_datos.correo_electronico"
+                                           ng-model-options="{ debounce:{'default':1000 , 'blur' : 0} }"
+                                           placeholder="nombre.apellido@madecentro.co    "
+                                           class="form-control"
+                                           type="email"
+                                           style="text-transform:lowercase; margin-right:0%" />
+                                    <span class="help-block" style="text-align:left"></span>
+                                </div>
+                            </div>
+                            <div>
+                                <button popover="Buscar usuario" popover-trigger="mouseenter" type="button" class="submit-form-green btn-sm ng-scope" style="float: left; text-transform: none; width: auto; margin-left: -9px;margin-top:5px; display: initial; height: 34px; padding-top: 2px;"
+                                        ng-click="consultar_permisos_por_usuario_grupo(); consultar_permisos_por_usuario_lineas()">
+                                    <i class="fa fa-search" style="font-size: 15px"></i>
+                                </button>
+                            </div>
+                            <br /><br /><br /><br /><br /><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="div_resultado_zona">
+                <div class="form-group col-md-9">
+                    <div id="div_textarea_grupo">
+                        <h4 class="panel-heading-apps font-madecentro ng-binding" align="center" style="margin:10px 0px 0px 0px"><b>Autorizadores mayor descuento GRUPO:</b></h4>
+                        <div class="col-md-offset-8 form-group">
+                            <a popover="Agregar nuevo autorizador grupo" popover-trigger="mouseenter" class="fa fa-user-plus ng-scope" style="font-size: 40px; margin: 10px 50px 5px 50px; color: #F68414" aria-hidden="true"
+                               ng-click="asignarFacade('Agregar nuevo autorizador mayor dscto GRUPO')"
+                               data-toggle="modal" data-target="#modal_autorizar_usuario">
+                            </a>
+                            <a popover="Reemplazar Autorizador grupo" popover-trigger="mouseenter" class="fa fa-exchange ng-scope" style="font-size: 40px; margin: 10px 50px 5px 50px; color: #F68414" aria-hidden="true"
+                               ng-click="asignarFacade('Remplazar autorizador mayor dscto GRUPO')"
+                               data-toggle="modal" data-target="#modal_cambiar_permiso_zona_grupo_linea">
+                            </a>
+                        </div>
+
+                        <!--<label class="texto-titulos">Usuarios autorizados para dar descuentos por GRUPO</label>-->
+                        <textarea class="form-control" rows="3" id="txt_autorizadores_grupo" readonly="readonly">{{obj_usuarios_autorizados_dcto_grupo.aprobadores}}</textarea>
+                    </div>
+                    <br /><br />
+                    <hr />
+                    <br /><br />
+                    <div id="div_textarea_linea">
+                        <h4 class="panel-heading-apps font-madecentro ng-binding" align="center"><b>Autorizadores mayor descuento LINEA:</b></h4>
+                        <div class="col-md-offset-8 form-group ">
+                            <a popover="Agregar nuevo Autorizador linea" popover-trigger="mouseenter" class="fa fa-user-plus ng-scope" style="font-size: 40px; margin: 10px 50px 5px 50px; color: #F68414" aria-hidden="true"
+                               ng-click="asignarFacade('Agregar nuevo autorizador mayor dscto LINEA')"
+                               data-toggle="modal" data-target="#modal_autorizar_usuario">
+                            </a>
+                            <a popover="Reemplazar Autorizador linea" popover-trigger="mouseenter" class="fa fa-exchange ng-scope" style="font-size: 40px; margin: 10px 50px 5px 50px; color: #F68414" aria-hidden="true"
+                               ng-click="asignarFacade('Remplazar autorizador mayor dscto LINEA')"
+                               data-toggle="modal" data-target="#modal_cambiar_permiso_zona_grupo_linea"></a>
+                        </div>
+
+                        <!--<label class="texto-titulos">Usuarios autorizados para dar descuentos por LINEA</label>-->
+                        <textarea class="form-control" rows="3" id="txt_autorizadores_linea" readonly="readonly">{{obj_usuarios_autorizados_dcto_linea.aprobadores}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!--Cabecera Tablas-->
+            <div id="div_tablas_permisos">
+                <div class="col-sm-9">
+                    <h3 style="color:black; text-transform:lowercase" ng-show="show_txt_permiso==1">  Permisos para: <b>{{obj_permisos_por_usuario.user_name }} </b></h3>
+                    <h3 style="color:black; text-transform:lowercase" ng-show="show_txt_permiso2==1">  El usuario: <b>{{obj_permisos_por_usuario.user_name }}, </b> <br />No tiene permisos de mayor descuento.</h3>
+                    <div class="col-sm-offset-8 col-sm-1" ng-show="show_txt_permiso==1">
+                        <a popover="Reemplazar Autorizador grupo" popover-trigger="mouseenter" class="hi-icon fa-exchange ng-scope" aria-hidden="true"
+                           ng-click="asignarFacade('Remplazar autorizador por nuevo autorizador mayor dscto')"
+                           data-toggle="modal" data-target="#modal_remplazar_permisos_por_usuario">
+                        </a>
+                    </div>
+                    <!-- Tabla Permisos Usuario Grupo -->
+                    <div class="bs-component col-sm-12" ng-controler="" ng-if="array_permisos_por_usuario_grupo.length > 0">
+                        <h3 class="panel-heading-apps font-madecentro ng-binding" align="center"><b>Grupos</b></h3>
+                        <table class="table table-condensed table-striped " ng-if="array_permisos_por_usuario_grupo.length > 0">
+                            <thead class="css_tabla_usu_sam_enc">
+                                <tr>
+                                    <th>
+                                        Zona
+                                    </th>
+                                    <th>
+                                        GRUPO
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="8">
+                                        <input type="text" ng-model="filtro_buscar" class="form-control" aria-hidden="true" placeholder="Buscar...." />
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="item in array_permisos_por_usuario_grupo|filter: filtro_buscar" class="ng-scope" ng-click="">
+                                    <td>{{item.d_zona}} </td>
+                                    <td>
+                                        <input type="checkbox" style="transform:scale(1.8)" ng-model="item.sw_cambiar_autorizador_grupo" />
+                                        <b>{{item.d_grupo}} </b>
+                                    </td>
+                        </table>
+                        <br />
+                    </div>
+                    <!-- Tabla Permisos Usuario Linea -->
+                    <div class="bs-component  col-sm-12" ng-controler="" ng-if="array_permisos_por_usuario_linea.length > 0">
+                        <h3 class="panel-heading-apps font-madecentro ng-binding" align="center"><b>Lineas</b></h3>
+                        <table class="table table-condensed table-striped " ng-if="array_permisos_por_usuario_linea.length > 0">
+                            <thead class="css_tabla_usu_sam_enc">
+                                <tr>
+                                    <th>
+                                        Zona
+                                    </th>
+                                    <th>
+                                        Grupo
+                                    </th>
+                                    <th>
+                                        LINEA
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="8">
+                                        <input type="text" ng-model="filtro_buscar" class="form-control" aria-hidden="true" placeholder="Buscar...." />
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="item in array_permisos_por_usuario_linea|filter: filtro_buscar" class="ng-scope" ng-click="">
+                                    <td>{{item.d_zona}} </td>
+                                    <td>{{item.d_grupo}} </td>
+                                    <td>
+                                        <input type="checkbox" style="transform:scale(1.8)" ng-model="item.sw_cambiar_autorizador_grupo" />
+                                        <b>{{item.d_linea}} </b>
+                                    </td>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal autorizar por grupo -->
+    <div id="modal_autorizar_usuario" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title ">{{nombreFacade}}</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="texto-titulos">Ingrese usuario:</label>
+                        <div class="form-group">
+                            <input id="txt_autorizar_usuario_grupo"
+                                   ng-change="verificar_user_name('txt_autorizar_usuario_grupo')"
+                                   ng-model="obj_datos.correo_electronico"
+                                   ng-model-options="{ debounce:{'default':1000 , 'blur' : 0} }"
+                                   placeholder="nombre.apellido@madecentro.co"
+                                   class="form-control"
+                                   type="email"
+                                   style="text-transform:lowercase" />
+                            <span class="help-block"></span>
+                            <br>
+                            <div class="col-sm-offset-6 col-sm-6 form-group">
+                                <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" style="background-color: #F68414;"
+                                        ng-click="limpiar_usuario();"
+                                        ng-show="show_btn_limpiar_users==1">
+                                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">&ensp;Limpiar&ensp;</span>
+                                </button>
+                                <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" style="background: #f68414"
+                                        ng-click="facadeAutorizar()"
+                                        ng-show="show_btn_permiso_users==1">
+                                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-check" aria-hidden="false"></span>
+                                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Autorizar</span>
+                                </button>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal_cambiar_permiso_zona_grupo_linea" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content este es el modal para cambiar un usuario por otro en determinado grupo o linea-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">{{nombreFacade}}</h3>
+                </div>
+                <div class="modal-body">
+
+
+                    <label class="texto-titulos">Ingrese el usuario que desea reemplazar:</label>
+                    <div>
+                        <div class="form-group">
+                            <input type="email"
+                                   id="txt_cambio_usuario"
+                                   ng-change="verificar_formato_del_correo('txt_cambio_usuario')"
+                                   ng-model="obj_usuarios_autorizados_dcto_grupo.usuario"
+                                   ng-model-options="{ debounce:{'default':1000 , 'blur' : 0} }"
+                                   placeholder="nombre.apellido@madecentro.co"
+                                   class="form-control"
+                                   style="text-transform:lowercase" />
+                            <span class="help-block"></span>
+                        </div>
+
+
+                        <label class="texto-titulos">Nuevo usuario:</label>
+                        <div class="form-group">
+                            <input type="email"
+                                   id="txt_cambio_nuevo_usuario"
+                                   ng-change="temporal_verificar_correos('txt_cambio_nuevo_usuario')"
+                                   ng-model="obj_usuarios_autorizados_dcto_grupo.nuevo_usuario"
+                                   ng-model-options="{ debounce:{'default':1000 , 'blur' : 0} }"
+                                   placeholder="nombre.apellido@madecentro.co"
+                                   class="form-control"
+                                   style="text-transform:lowercase" />
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="col-sm-offset-6 col-sm-6 form-group">
+                            <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" style="background-color: #F68414;"
+                                    ng-click="limpiar_usuario();"
+                                    ng-show="show_btn_limpiar_users==1">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">&ensp;Limpiar&ensp;</span>
+                            </button>
+                            <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" style="background: #f68414"
+                                    ng-click="facadeAutorizar()"
+                                    ng-show="show_btn_permiso_users==1">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-check" aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif" ; font-size 16px;">Autorizar</span>
+                            </button>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal_remplazar_permisos_por_usuario" class="modal" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">{{nombreFacade}}</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <label class="texto-titulos">Usuario a reemplazar:</label>
+                            <div class="form-group">
+                                <input type="email" readonly
+                                       id="txt_usuario_remplazar"
+                                       ng-model="obj_permisos_por_usuario.user_name"
+                                       class=" form-control"
+                                       style="text-transform:lowercase" />
+                                <span class="help-block"></span>
+                            </div>
+                            <div>
+                                <label class="texto-titulos">Ingrese nuevo usuario:</label>
+                                <div>
+                                    <input type="email"
+                                           id="txt_remplazo_nuevo_usuario"
+                                           ng-change="temporal_verificar_correos_remplazo('txt_remplazo_nuevo_usuario')"
+                                           ng-model="obj_datos.nuevo_usuario_remplazo"
+                                           ng-model-options="{ debounce:{'default':1000 , 'blur' : 0} }"
+                                           placeholder="nombre.apellido@madecentro.co"
+                                           class="form-control"
+                                           style="text-transform:lowercase" />
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-offset-6 col-sm-6 form-group">
+                        <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" style="background-color: #F68414;"
+                                ng-click="limpiar_usuario_de_cambio();"
+                                ng-show="show_btn_limpiar_users==1">
+                            <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+                            <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">&ensp;Limpiar&ensp;</span>
+                        </button>
+                        <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" style="background: #f68414"
+                                ng-click="facadeAutorizar()"
+                                ng-show="show_btn_permiso_users==1">
+                            <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-check" aria-hidden="false"></span>
+                            <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Autorizar</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+

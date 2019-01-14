@@ -1,0 +1,353 @@
+﻿<!DOCTYPE html>
+<!---- =============================================
+-- Author: <JOSE DANIEL ESTRADA>
+-- <2015>
+-- Description: <App MAESTROS DE APLICACIONES>
+-- Compañia: <Madecentro Colombia S.A.S>
+-- Date Versión: 20181227
+-- =============================================-->
+<html ng-app="appmadecentro" style="overflow: hidden">
+<head runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+    <script type="application/javascript">
+        var VERSION_APP = "2.7.0";
+    </script>
+
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+
+    <!--Estilos-->
+    <!--<link href="Assets/VendorReferences/Bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/Bootstrap/css/bootstrap-theme.css" rel="stylesheet" />-->
+    <link href="Assets/VendorReferences/Bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="Assets/Css/animate.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/bootstrap-fileinput-4.2.7/css/fileinput.min.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/Select2/select2.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/Select2/select2-bootstrap.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/font-awesome-4.6.1/css/font-awesome.css" rel="stylesheet" />
+    <link href="Assets/Css/SpinKit.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/startbootstrap-simple-sidebar-1.0.4/css/simple-sidebar.css" rel="stylesheet" />
+    <link href="Assets/Css/global.css" rel="stylesheet" />
+    <link href="Assets/Css/custom.css" rel="stylesheet" />
+    <link href="Assets/Css/hover.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/Toastr/toastr.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/smartTable/smart-table.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/fancyBox/source/jquery.fancybox.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/ionicons-2.0.1/ionicons-2.0.1/css/ionicons.min.css" rel="stylesheet" />
+    <script type="text/javascript">
+        var estilo = "Assets/VendorReferences/Transitions/css/component.css?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<link rel=\"stylesheet\" href=\"' + estilo + '\"\/>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var estilo = "Assets/Css/EstilosMaestros.css?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<link rel=\"stylesheet\" href=\"' + estilo + '\"\/>';
+        document.write(cadena);
+    </script>
+    <link href="Assets/Css/login.css?v=2.7.0" rel="stylesheet" />
+    <link href="Assets/VendorReferences/DataPicker/bootstrap-datetimepicker.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/Notification_menu/style_light.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/ngProgress/ngProgress.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/alertify/css/alertify.min.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/alertify/css/themes/default.min.css" rel="stylesheet" />
+    <link href="Assets/VendorReferences/alertify/css/themes/semantic.min.css" rel="stylesheet" />
+
+    <title>Maestro | MADECENTRO</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+</head>
+<body ng-controller="app" ng-cloak>
+    <div id="app-outer-container" ng-if="valido" style="overflow-x: scroll;">
+
+        <nav class="navbar navbar-inverse" style="top: 6px; border-radius: 0px;">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a ng-click="RedirectTo('/Maestros');" class="navbar-brand" style="cursor: pointer;">
+                        <img src="Assets/img/ico-logo-madecento.png" class="logo-menu-app">
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{'active' : $root.actualPage === '/Maestros'}">
+                            <a href="javascript:;" ng-click="RedirectTo('/Maestros');" style="height: 55px;padding-top: 18px;">
+                                <span class="glyphicon glyphicon-home title-bar-nav"> </span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionDescuentos'}"
+                            ng-if="$root.actualPage === '/GestionDescuentos'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-percent" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Maestro Descuentos</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/ProgramacionDescuentos'}"
+                            ng-if="$root.actualPage === '/ProgramacionDescuentos'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-calendar-plus-o" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Programación Descuentos</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionPlazas'}"
+                            ng-if="$root.actualPage === '/GestionPlazas'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-street-view" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Gestión Posiciónes</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionPersonal'}"
+                            ng-if="$root.actualPage === '/GestionPersonal'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="ion ion-person-stalker" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Gestión Personal</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionCargos'}"
+                            ng-if="$root.actualPage === '/GestionCargos'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-users" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Gestion Cargos</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionSedesPdv'}"
+                            ng-if="$root.actualPage === '/GestionSedesPdv'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-list" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Gestion Sedes Pdv</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionBodegasPdv'}"
+                            ng-if="$root.actualPage === '/GestionBodegasPdv'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-industry" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;Gestion Bodegas Pdv</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/AutorizadoresMayorDcto'}"
+                            ng-if="$root.actualPage === '/AutorizadoresMayorDcto'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-percent" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;AutorizadoresMayorDcto</span>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : $root.actualPage === '/GestionPresupuestosMesPdv'}"
+                            ng-if="$root.actualPage === '/GestionPresupuestosMesPdv'">
+
+                            <a href="javascript:;" style="height: 55px; padding-top: 15px;">
+                                <span class="fa fa-calculator" style="font-size: 22px;"> </span>
+                                <span class="font-bar">&nbsp;GestionPresupuestosMesPdv</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right" style="margin-bottom: -8px;">
+
+                        <li style="background: rgba(240, 248, 255, 0);" class="dropdown user user-menu">
+                            <a class="dropdown-toggle" style="cursor: pointer; height: 55px">
+                                <img ng-src="{{Img_Perfil.ruta}}" class="user-image" alt="User Image">
+                                <span class="hidden-xs" style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 15px; text-shadow: 0 2px 0 rgba(0, 0, 0, .2);">{{log_usuario.nombre | uppercase}}</span>
+                            </a>
+                            <div class="dropdown-menu window_session_info" style="box-shadow: 0px 3px 8px 2px rgba(89, 88, 88, 0.74);" id="mod-info-session">
+                                <!-- imagen del usuario -->
+                                <div class="user-header" style="color: white">
+                                    <img alt="zoom" ng-src="{{Img_Perfil.ruta}}" class="img-circle second_imagen" style="cursor: pointer; text-align: left; margin-bottom: 15px;"><br />
+                                    <span style="color: white; text-align: -webkit-right;">
+                                        <span class="font-madecentro" style="font-size: larger; text-shadow: 0 0px 0 rgba(255, 255, 255, .25);">{{log_usuario.nombre | uppercase}} </span>
+                                    </span>
+                                    <hr style="margin-top: 5px; margin-bottom: 5px;" />
+                                    <span class="ion-code-working" style="font-size: large;"></span>
+                                    <span class="text-capitalize font-madecentro">Versión {{VERSION_APP}}</span>
+                                </div>
+                                <div class="user-footer text-center">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default" ng-click="RedirectTo('/HomePet');CerrarSession.value=true" style="cursor: pointer">
+                                            <span class="font-madecentro" style="font-size: 15px;">Cerrar sesión</span>&nbsp;
+                                            <i class="fa fa-sign-out" style="font-size: 20px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container-fluid" style="margin-top: 30px; ">
+            <div ng-view class="full-size-container"></div>
+        </div>
+        <div id="scroll-top" class="hvr-float btn-mdc">
+            <i class="fa fa-arrow-circle-up fa-2x" style="line-height: 1.5;text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);"></i>
+        </div>
+    </div>
+    <div ng-if="ShowEditarPerfil.value" class="menu-options-location full-size-container" style="background-color: rgba(0, 0, 0, 0.65);" ng-include src="'Partials/EditarPerfil.html'"></div>
+
+    <div id="ImagenPerfil" class="modal fade" style="top: 0px; background-color: rgba(0, 0, 0, 0.278431);">
+        <div class="modal-dialog" style="width: 650px;">
+            <div class="modal-content" style="background-color: rgba(255, 255, 255, 0);box-shadow: 0 0 0 rgba(0, 0, 0, 0);border: 0 solid rgba(0, 0, 0, .2);">
+                <div class="modal-header" style="border: 0px;">
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <object data="{{urlImagenReply}}" width="616" height="474" style="overflow:auto;width: 616px;height: 474px;box-shadow: 7px 3px 28px rgba(0, 0, 0, .5);;border: 2px solid white;border-radius: 6px;"></object>
+                </div>
+                <div class="modal-footer" style="border: 0px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div x-login-control></div>
+    <alertdialog control="objectDialog" getdata="ConfirmResult(valor,funcion)"></alertdialog>
+
+    <!--vendor files-->
+    <script src="Assets/VendorReferences/Jquery/jquery-1.11.0.js"></script>
+    <script src="Assets/VendorReferences/Bootstrap/js/bootstrap.min.js"></script>
+    <script src="Assets/VendorReferences/Angular/angular.min.js"></script>
+    <script src="Assets/VendorReferences/Angular/angular-route.js"></script>
+    <script src="Assets/VendorReferences/Angular/angular-sanitize.min.js"></script>
+    <script src="Assets/VendorReferences/ngCookies/angular-cookies.min.js"></script>
+    <script src="Assets/VendorReferences/Angular-bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+    <script src="Assets/VendorReferences/angular-file-upload-master/angular-file-upload-shim.min.js"></script>
+    <script src="Assets/VendorReferences/angular-file-upload-master/angular-file-upload.min.js"></script>
+    <script src="Assets/VendorReferences/LinqJs/jquery.linq.min.js"></script>
+    <script src="Assets/VendorReferences/LinqJs/linq.min.js"></script>
+    <script src="Assets/select2.min.js"></script>
+    <script src="Assets/VendorReferences/bootstrap-fileinput-4.2.7/js/fileinput.js"></script>
+    <script src="Assets/VendorReferences/bootstrap-fileinput-4.2.7/js/fileinput_locale_es.js"></script>
+    <script src="Assets/VendorReferences/Angular/angular-locale_es-co.js"></script>
+    <script src="Assets/VendorReferences/Angular-bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    <script src="Assets/VendorReferences/ngProgress/ngProgress.js"></script>
+    <script src="Assets/VendorReferences/Transitions/js/modernizr.custom.js"></script>
+    <script src="Assets/VendorReferences/Toastr/toastr.min.js"></script>
+    <script src="Assets/VendorReferences/angular-block-ui/dist/angular-block-ui.js"></script>
+    <script src="Assets/VendorReferences/Angular-animate/angular-animate.js"></script>
+    <script src="Assets/VendorReferences/Angular-messages/angular-messages.js"></script>
+    <script src="Assets/VendorReferences/smartTable/smart-table.js"></script>
+    <script src="Assets/VendorReferences/Notification_menu/jquery-ui-1.8.14.custom.min.js"></script>
+    <script src="Assets/VendorReferences/Notification_menu/ttw-notification-menu.js"></script>
+    <script src="Assets/VendorReferences/Notification_menu/ttw-notification-menu.min.js"></script>
+    <script src="Assets/VendorReferences/DataPicker/moment-with-locales.js"></script>
+    <script src="Assets/VendorReferences/DataPicker/bootstrap-datetimepicker.js"></script>
+    <script src="Assets/VendorReferences/alertify/alertify.min.js"></script>
+    <script src="Assets/VendorReferences/underscore/underscore-min.js"></script>
+    <script src="Assets/VendorReferences/fancyBox/source/jquery.fancybox.js"></script>
+
+    <!--Modules-->
+    <script type="text/javascript">
+        var modulo = "app.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/Home/HomeCtrl.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/Maestros/MaestrosCtrl.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionPlazas/GestionPlazas.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script src="Modulos/GestionCargos/GestionCargosCtrl.js"></script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionCargos/GestionCargosCtrl.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script src="Modulos/GestionSedesPdv/GestionSedesPdvCtrl.js"></script>
+    <script src="Modulos/GestionBodegasPdv/GestionBodegasPdvCtrl.js"></script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionBodegasPdv/GestionBodegasPdvCtrl.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script src="Modulos/AutorizadoresMayorDcto/AutorizadoresMayorDctoCtrl.js"></script>
+    <script type="text/javascript">
+        var modulo = "Modulos/AutorizadoresMayorDcto/AutorizadoresMayorDctoCtrl.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script src="Modulos/GestionPresupuestosMesPdv/GestionPresupuestosMesPdvCtrl.js"></script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionDescuentos/GestionDescuentos.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script src="Modulos/GestionUsuariosSam/UsuariosSam.js"></script>
+    <script src="Modulos/GestionMesesInv/MesesInventario.js"></script>
+    <script type="text/javascript">
+        var modulo = "Modulos/ProgramacionDescuentos/ProgramacionDescuentos.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionPersonal/GestionPersonal.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/UsuariosTransporte/UsuariosTransporte.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionMayorDescuento/GestionMayorDescuento.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <script type="text/javascript">
+        var modulo = "Modulos/GestionSuperOferta/GestionSuperOferta.js?rand=" + parseInt(Math.random() * 10000);
+        var cadena = '<script type=\"text/javascript\" src=\"' + modulo + '\"><\/script>';
+        document.write(cadena);
+    </script>
+    <!--Directives-->
+    <script src="Directivas/LoginDir/loginDirPet.js"></script>
+    <script src="Directivas/LoadingDir/AlertDirPet.js"></script>
+    <script src="Directivas/ValidacionautoDir/validacionAutoDirPet.js"></script>
+    <script src="Directivas/repeatdone.js"></script>
+    <script src="Directivas/smart-table_plugin_range_date.js"></script>
+    <script src="Directivas/smart-table_plugin_search.js"></script>
+    <script src="Directivas/OnlyNumbers/onlynumbers.js"></script>
+    <script src="Directivas/pageSelect/pageSelect.js"></script>
+    <script src="Directivas/formatNumber/formatNumberDir.js"></script>
+
+    <!--Services-->
+    <script src="Servicios/TreidConfigSrv.js?v=2.7.0"></script>
+    <script src="Servicios/loginService.js?v=2.7.0"></script>
+    <script src="Servicios/gestionMaestros.service.js?v=2.7.0"></script>
+    <script src="Servicios/GestionUsuSamService.js?v=2.7.0"></script>
+    <script src="Servicios/gestionPersonas.service.js?v=2.7.0"></script>
+    <script src="Servicios/MesesInventarioService.js?v=2.7.0"></script>
+    <script src="Servicios/gestionDescuentosService.js?v=2.7.0"></script>
+    <script src="Servicios/GestionCargosService.js?v=2.7.0"></script>
+    <script src="Servicios/GestionSedesPdvService.js?v=2.7.0"></script>
+    <script src="Servicios/GestionBodegasPdvService.js?v=2.7.0"></script>
+    <script src="Servicios/AutorizadoresMayorDctoService.js?v=2.7.0"></script>
+    <script src="Servicios/GestionPresupuestosMesPdvService.js?v=2.7.0"></script>
+    <script src="Servicios/GestionMayorDescuentoService.js?v=2.7.0"></script>
+    <script src="Servicios/GestionSuperOfertaService.js?v=2.7.0"></script>
+
+    <script src="Utils/utils.js"></script>
+    <script src="Filter/dateFilter.js"></script>
+</body>
+</html>

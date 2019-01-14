@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'eurof35';
+	src: url('./eurof35.eot');
+	src: local('eurof35'), url('./eurof35.woff') format('woff'), url('./eurof35.ttf') format('truetype');
+}
+/* use this class to attach this font to any element i.e. <p class="fontsforweb_fontid_469">Text with this font applied</p> */
+.fontsforweb_fontid_469 {
+	font-family: 'eurof35' !important;
+}
+
+/* Font downloaded from FontsForWeb.com */

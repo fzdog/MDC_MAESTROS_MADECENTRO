@@ -1,0 +1,196 @@
+﻿<div class="row" style=" background: white; box-shadow: rgba(0, 0, 0, 0.9) 1px 9px 24px !important; padding-top: 15px; padding-bottom: 15px;">
+    <div class="form-group padding-left-right-15px">
+        <button ng-click="RedirectTo('/Maestros');" type="button" class="close close-frm-posiciones"style="margin-top: 0;">
+            <span aria-hidden="true">×</span>
+        </button>
+        <button id="menu-toggle" type="button" class="btn btn-mdc" ng-click="openMenu()">
+            <span style="font-size: 25px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Buscar persona" class="glyphicon glyphicon-search"></span>
+        </button>
+        <button type="button" class="btn btn-mdc" ng-click="LimpiarCampos(crearUsuario=1)">
+            <span style="font-size: 28px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Nueva persona" class="fa fa-user-plus"></span>
+        </button>
+    </div>
+    <div class="form-group">
+        <div id="wrapperPL" class="toggled">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapperPL" style="padding-top: 15px; max-height: 425px;">
+                <div class="padding-left-right-15px">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-9">
+                                <input id="input_find_person" name="input_find_person" placeholder="Ingrese cédula o nombres" class="form-control" type="text" ng-model="filtroPersona">
+                                <span id="searchclearUsuario" class="glyphicon glyphicon-remove"></span>
+                            </div>
+                            <div class="col-sm-3 ">
+                                <button ng-disabled="filtroPersona == ''" ng-click="buscarUsuario()" type="button" class="btn btn-mdc">
+                                    <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title="Cerrar" class="glyphicon glyphicon-search"></span>
+                                    <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Buscar</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             style="padding-left: 15px; padding-right: 15px;">
+                            
+                            <table class="table table-striped table-condensed table-bordered"
+                                   ng-if="ArrayDatosUsuarios.length > 0"
+                                   st-table="ArrayDatosUsuarios"
+                                   style="margin-top: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th st-sort="documento">
+                                            <span title="Documento">Documento</span>
+                                        </th>
+                                        <th st-sort="nombres">
+                                            <span title="Nombres del usuario">Nombres</span>
+                                        </th>
+                                        <th st-sort="apellidos">
+                                            <span title="Apellidos de usuario">Apellidos</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor: pointer;" ng-repeat="option in ArrayDatosUsuarios track by $index" ng-click="cargarUsuario(option)">
+                                        <td>
+                                            <span title="Documento">{{option.documento | number:0}}</span>
+                                        </td>
+                                        <td>
+                                            <span title="Nombres de la usuario">{{option.nombres}}</span>
+                                        </td>
+                                        <td>
+                                            <span title="Apellidos de la usuario">{{option.apellidos}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#sidebar-wrapperPL -->
+            <!-- Page Content -->
+            <div id="page-content-wrapperPL" style="border-left: 1px solid #D7D7D7;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <form>
+                            <fieldset  id="myFieldset">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Documento:</label>
+                                            <input id="ced_persona"  ui-number-mask="0" ng-disabled="modificar.value" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.documento" ng-blur="validar_existencia_cedula()" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                       
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Nombres:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.Nombres" style="text-transform: uppercase" maxlength="40">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required  texto-titulos" style="padding-left: 0px;">Apellidos:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.Apellidos" style="text-transform: uppercase" maxlength="40">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Cargo:</label>
+                                            <input x-validacion-auto="solo_letras" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.Cargo" style="text-transform: uppercase" maxlength="40">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label texto-titulos" style="padding-left: 0px;">Telefono:</label>
+                                            <input x-validacion-auto="solo_numeros" size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.telefono" char-limit="10">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Usuario:</label>
+                                            <input  size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.usuario" style="text-transform: uppercase" maxlength="40">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Contraseña:</label>
+                                            <input  size="30" type="password" aria-required="true" class="form-control" ng-model="objGestionUsuarios.contrasena" style="text-transform: uppercase" maxlength="40">
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos ">Transportadora:</label>
+                                            <select id="" class="form-control" ng-model="objGestionUsuarios.c_transportadora">
+                                                <option selected value="">Seleccione transportadora</option>
+                                                <option ng-repeat="items in arrayTransportadoras" ng-selected="items.seleccionado" value="{{items.c_transportadora}}">{{items.d_transportadora}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label label_required texto-titulos" style="padding-left: 0px;">Correo:</label>
+                                            <input size="30" type="text" aria-required="true" class="form-control" ng-model="objGestionUsuarios.correo" style="text-transform: uppercase" maxlength="50">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                          
+                            </fieldset>
+                        </form>
+                        <div class="row text-center">
+                            <label class="control-label texto-titulos">Activo </label>
+                            <input class="chk_sw_activo_persona" ng-disabled="disable_ChkswActivo" type="checkbox" ng-model="objGestionUsuarios.swActivo">
+                        </div>
+                        <br />
+                
+                   
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapperPL -->
+    </div>
+    <div class="text-center">
+        <div ng-show="crear.value && !modificar.value">
+            <!--GUARDAR-->
+            <button type="button" class="btn btn-mdc" ng-click="GuardarUusario();">
+                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" class="glyphicon glyphicon-floppy-disk"></span>
+                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Guardar</span>
+            </button>
+
+        </div>
+        <div ng-show="modificar.value">
+            <!--MODIFICAR-->
+            <button  type="button" class="btn btn-mdc" ng-click="updateUsuario();">
+                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-floppy-disk"></span>
+                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;"> Modificar</span>
+            </button>
+
+        </div>
+    </div>
+</div>

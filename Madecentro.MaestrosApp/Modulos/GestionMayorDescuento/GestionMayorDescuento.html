@@ -1,0 +1,701 @@
+﻿<div id="wrapper"
+     class="toggled"
+     style="-webkit-box-shadow: rgba(0, 0, 0, 0.9) 1px 9px 44px;">
+
+    <nav ng-hide="ocultarFiltros.value"
+         class="navbar-default navbar-side animated fadeInLeft"
+         role="navigation" style="
+    width: 353px;box-shadow: inset 0 0px 0 rgba(255, 255, 255, .15), 0 0px 0px rgba(0, 0, 0, .075);border-radius: 0px;">
+        <div class="sidebar-collapse">
+
+            <div class="container-fluid">
+                <div class="form-horizontal">
+                    <div style=" text-align: -webkit-center;">
+                        <h3 class="texto-titulos"
+                            style="font-size: 19px;">
+                            Filtros
+                        </h3>
+                    </div>
+                    <div>
+                        <label class="control-label texto-titulos">
+                            Buscar por:
+                        </label>
+                        <select class="form-control"
+                                id="selectPlan"
+                                ng-options=" opc.id_plan as opc.d_plan for opc in array_get_planes_criterios"
+                                ng-model="obj_filtro.id_plan"
+                                ng-change="get_lista_criterios_by_idPlan()"
+                                placeholder="Seleccione">
+                            <option value=""
+                                    disabled>
+                                Seleccione
+                            </option>
+                        </select>
+                    </div>
+
+                    <div ng-show="obj_filtro.id_plan ">
+                        <label class="control-label texto-titulos">
+                            Ingrese {{obj_ctrl.d_plan}}:
+                        </label>
+                        <select class="form-control"
+                                ng-options=" opc.id_criterio as opc.d_criterio for opc in array_get_lista_criterios_by_idPlan"
+                                ng-model="obj_filtro.id_criterio"
+                                id="selectCriterio"
+                                ng-show="obj_filtro.id_plan != 'REF'">
+                            <option value=""
+                                    disabled>
+                                Seleccione
+                            </option>
+                        </select>
+                        <input class="form-control"
+                               style="text-transform: uppercase"
+                               ng-show="obj_filtro.id_plan == 'REF'"
+                               ng-model="obj_filtro.id_criterio"
+                               placeholder="Ingrese referencia">
+                    </div>
+                    <br /><br />
+
+                    <div ng-show="obj_filtro.id_plan">
+                        <div style="text-align: center;"
+                             tooltip-trigger="mouseenter"
+                             tooltip-placement="top"
+                             tooltip="Buscar ">
+                            <button ng-click="get_validaciones_mayor_descuento_by_idcriterio()"
+                                    type="button"
+                                    class="hvr-glow btn btn-warning">
+                                <span style="font-size: 17px;position: relative;text-align: -webkit-right;margin-top: 3px"
+                                      class="fa fa-search"></span>
+                                <span style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;font-size: 16px;">
+                                    Consultar
+                                </span>
+                            </button>
+                        </div>
+                        <!--<div style="float: right;margin-top: -37px;"
+                             ng-click="LimpiarFiltros()">
+                            <img tooltip-trigger="mouseenter"
+                                 tooltip-placement="top"
+                                 tooltip="Limpiar los filtros"
+                                 src="Assets/img/cleanData.png"
+                                 width="35"
+                                 style="cursor: pointer;  -webkit-box-shadow: rgba(132, 123, 123, 0.882353) 3px 4px 9px;border-radius: 50px" tabindex="0">
+                        </div>-->
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </nav>
+    <div id="page-wrapper"
+         style="margin: 0 0 0 355px;padding: 1px 1px;">
+        <div id="page-inner"
+             style="border-left: 1px solid #DDDDDD;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-back noti-box">
+
+                        <div class="panel panel-default">
+
+                            <div class="margin-bottom">
+                                <div>
+
+                                    <div class="col-md-12">
+
+                                        <div class="col-sm-6 col-md-offset-3"
+                                             style="text-align:center">
+                                            <h4>
+                                                Validación máximo descuento autorizado
+                                            </h4>
+                                        </div>
+                                        <div class="col-md-3"
+                                             style="text-align:center">
+                                            <div class="btn-group ng-scope"
+                                                 align="center"
+                                                 style="margin: 15px; display: inline-flex;">
+                                                <label class="btn-xs btn btn-warning btns-categograma "
+                                                       ng-model="radioModel"
+                                                       ng-click="cloneInformation(obj_data,'NEW_FILE','')"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="top"
+                                                       tooltip="Cargar archivo .csv">
+                                                    <i class="fa fa-file-excel-o"></i>
+                                                </label>
+                                                <label class="btn-xs btn btn-warning btns-categograma "
+                                                       ng-model="radioModel"
+                                                       ng-click="cloneInformation(obj_data,'NEW_ALL','ModalAddOrModify')"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="top"
+                                                       tooltip="Adicionar item">
+                                                    <i class="fa fa-plus"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+                            <hr style="border: 1.5px solid #CAC8C8;" />
+                            <div class="panel-body" style=" margin-top: 60px;">
+                                <!--==============================-->
+                                <!--Upload information csv-->
+                                <div ng-show="obj_ctrl.view_uploadFileCsv">
+                                    <!--no mostrar-->
+                                    <pre id="fileContents" rows="30" cols="150" ng-show="1==9999">{{objetoResultado}} </pre>
+
+                                    <div class="col-md-12" style="margin-top:10px">
+                                        <div class="col-md-4">
+                                            <a href="assets/docs/Formato_gestion_mayor_dcto_csv.csv">
+                                                <img style="text-align:center"
+                                                     src="assets/img/Logo_-Excel-2013.png"
+                                                     width="20"
+                                                     height="20" />
+                                                Descargar formato
+                                                <i class="fa fa-download"></i>
+                                            </a>
+
+                                        </div>
+                                        <div class="col-md-4" style="text-align:center">
+                                            <!--Boton Grafico-->
+
+                                            <i class="fa fa-trash fa-2x"
+                                               style="text-align:center"
+                                               tooltip-trigger="mouseenter"
+                                               tooltip-placement="bottom"
+                                               tooltip="Eliminar archivo"
+                                               ng-if="arreglocsv.length > 0"
+                                               ng-click="deleteContent()">
+                                            </i>
+
+                                        </div>
+                                        <!--Boton open file-->
+                                        <div class="col-md-4 ">
+                                            <input type="file"
+                                                   id="openFile"
+                                                   class="file"
+                                                   style="margin-top:0%; font-size:15px; text-align:center" />
+                                        </div>
+                                    </div>
+
+                                    <table class="table table-striped table-bordered table-hover"
+                                           style="margin-top: 20px"
+                                           st-table="arreglocsv"
+                                           ng-if="arreglocsv.length > 0">
+                                        <thead>
+                                            <tr class="center"
+                                                style="text-align: center">
+                                                <th>
+                                                    Item
+                                                </th>
+                                                <!--Code commented for changes in the application-->
+                                                <!--<th>
+                                                    Grupo
+                                                </th>
+                                                <th>
+                                                    Linea
+                                                </th>
+                                                <th>
+                                                    Sublinea
+                                                </th>-->
+                                                <th>
+                                                    Referencia
+                                                </th>
+                                                <th>
+                                                    % Descuento
+                                                    <br />
+                                                    pdv
+                                                </th>
+                                                <th>
+                                                    % Descuento
+                                                    <br />
+                                                    corporativo
+                                                </th>
+                                                <th>
+                                                    Activo
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in arreglocsv">
+                                                <td>
+                                                    <i class="fa fa-times-circle"
+                                                       ng-show="item.sw_error"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="bottom"
+                                                       tooltip="Error en registro"
+                                                       style="color:red">
+                                                    </i>
+                                                    {{item.item}}
+                                                    <br />
+                                                    <i class="fa fa-trash fa-2x"
+                                                       ng-show="item.sw_error"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="bottom"
+                                                       tooltip="Eliminar item"
+                                                       style="color:gray"
+                                                       ng-click="deleteRow($index)">
+                                                    </i>
+                                                </td>
+                                                <!--Code commented for changes in the application-->
+                                                <!--<td>
+                                                    {{item.c_grupo}}
+                                                </td>
+                                                <td>
+                                                    {{item.c_linea}}
+                                                </td>
+                                                <td>
+                                                    {{item.c_sublinea}}
+                                                </td>-->
+                                                <td style="text-transform: uppercase">
+                                                    <b>
+                                                        <i class="fa fa-times-circle"
+                                                           ng-show="item.sw_error_referencia_repetida"
+                                                           tooltip-trigger="mouseenter"
+                                                           tooltip-placement="bottom"
+                                                           tooltip="Referencia repetida"
+                                                           style="color:red">
+                                                        </i>
+                                                        <i class="fa fa-times-circle"
+                                                           ng-show="item.sw_error_referencia"
+                                                           tooltip-trigger="mouseenter"
+                                                           tooltip-placement="bottom"
+                                                           tooltip="Error referencia"
+                                                           style="color:red">
+                                                        </i>
+                                                        {{item.referencia}}
+                                                    </b>
+                                                    <br />
+                                                    <span style="color:gray; font-size: small">{{item.descripcion_referencia}}</span>
+                                                </td>
+                                                <td>
+
+                                                    {{item.pj_dcto_pdv}}
+                                                    <i class="fa fa-times-circle"
+                                                       ng-show="item.sw_error_dcto_pv"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="bottom"
+                                                       tooltip="Error descuento maximo {{obj_ctrl.dcto_max_pv}}%"
+                                                       style="color:red">
+                                                    </i>
+                                                    <i class="fa fa-times-circle"
+                                                       ng-show="item.sw_error_dcto_mayor_pv"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="bottom"
+                                                       tooltip="Error el descuento de pv no puede ser mayor al corporativo"
+                                                       style="color:red">
+                                                    </i>
+
+                                                </td>
+                                                <td>
+                                                    {{item.pj_dcto_corporativo}}
+                                                    <i class="fa fa-times-circle"
+                                                       ng-show="item.sw_error_dcto_corporativo"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="bottom"
+                                                       tooltip="Error descuento maximo {{obj_ctrl.dcto_max_corporativo}}%"
+                                                       style="color:red">
+                                                    </i>
+                                                    <i class="fa fa-times-circle"
+                                                       ng-show="item.sw_error_dcto_mayor_pv"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="bottom"
+                                                       tooltip="Error el descuento de pv no puede ser mayor al corporativo"
+                                                       style="color:red">
+                                                    </i>
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                           style="transform: scale(1.8); margin:5px"
+                                                           ng-model="item.sw_activo"
+                                                           class="ng-pristine ng-valid ng-touched"
+                                                           disabled>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <!--<tfoot style="background-color: white;">
+                                            <tr>
+                                                <td colspan="13"
+                                                    class="text-center"
+                                                    style="background: rgb(239, 239, 239);">
+                                                    <div st-pagination=""
+                                                         st-items-by-page="10"
+                                                         st-displayed-pages="10">
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>-->
+                                    </table>
+                                    <div>
+                                        <div style="text-align: center;"
+                                             tooltip-trigger="mouseenter"
+                                             tooltip-placement="top"
+                                             tooltip="Guardar">
+                                            <button ng-click="insert_validaciones_mayor_descuento()"
+                                                    ng-show="arreglocsv.length > 0"
+                                                    type="button"
+                                                    class="hvr-glow btn btn-warning">
+                                                <span style="font-size: 17px;position: relative;text-align: -webkit-right;margin-top: 3px"
+                                                      class="fa fa-floppy-o"></span>
+                                                <span style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;font-size: 16px;">
+                                                    Guardar
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!--table search Information-->
+                                <div ng-show="obj_ctrl.view_searchTable">
+
+                                    <table class="table table-striped table-bordered table-hover"
+                                           style="margin-top: 20px"
+                                           st-table="array_get_validaciones_mayor_descuento_by_idcriterio"
+                                           ng-if="array_get_validaciones_mayor_descuento_by_idcriterio.length > 0">
+                                        <thead>
+                                            <tr class="center"
+                                                style="text-align: center">
+
+                                                <!--Code commented for the changes in the application-->
+                                                <!--<th>
+                                                    Grupo
+                                                </th>
+                                                <th>
+                                                    Linea
+                                                </th>
+                                                <th>
+                                                    Sublinea
+                                                </th>-->
+                                                <th st-sort="referencia">
+                                                    Referencia
+                                                </th>
+                                                <th>
+                                                    % Descuento
+                                                    <br />
+                                                    pdv
+                                                </th>
+                                                <th>
+                                                    % Descuento
+                                                    <br />
+                                                    corporativo
+                                                </th>
+                                                <th>
+                                                    Activo
+                                                </th>
+
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <input st-search="referencia"
+                                                           placeholder="Filtrar por Referencia"
+                                                           class="input-sm form-control"
+                                                           type="search" />
+                                                </th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="item in array_get_validaciones_mayor_descuento_by_idcriterio">
+                                                <!--Code commented for changes in the aplication-->
+                                                <!--<td>
+                                                    {{item.c_grupo}}
+                                                </td>
+                                                <td>
+                                                    {{item.c_linea}}
+                                                </td>
+                                                <td>
+                                                    {{item.c_sublinea}}
+                                                </td>-->
+
+                                                <td>
+                                                    <b>
+                                                        {{item.referencia}}
+                                                    </b>
+                                                    <br />
+                                                    <span style="color:gray; font-size: small">{{item.descripcion_referencia}}</span>
+                                                </td>
+                                                <td>
+                                                    {{item.pj_dcto_pdv}}
+                                                </td>
+                                                <td>
+                                                    {{item.pj_dcto_corporativo}}
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox"
+                                                           style="transform: scale(1.8); margin:5px"
+                                                           ng-model="item.sw_activo"
+                                                           class="ng-pristine ng-valid ng-touched"
+                                                           disabled>
+
+                                                    <i class="fa fa-pencil-square-o fa-2x"
+                                                       style="float:right; color: #FF8805; cursor:pointer"
+                                                       ng-click="cloneInformation(item,'EDIT','ModalAddOrModify')"
+                                                       tooltip-trigger="mouseenter"
+                                                       tooltip-placement="top"
+                                                       tooltip="Editar ">
+                                                    </i>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                        <tfoot style="background-color: white;">
+
+                                            <tr>
+                                                <td colspan="8" class="text-center">
+                                                    <div st-pagination="" st-items-by-page="20" st-displayed-pages="10"></div>
+                                                </td>
+                                            </tr>
+
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <!--=============================================-->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div id="guardar-cambios" class="hvr-grow" ng-click="update_meses_inv()">
+                <i popover="Guardar cambios"
+                   popover-trigger="mouseenter"
+                   class="glyphicon glyphicon-floppy-saved"
+                   style="color: white;font-size: 36px;"></i>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade"
+     id="ModalAddOrModify"
+     role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        ng-click="cerrar_modal_insertar_bodega();">
+                    &times;
+                </button>
+                <h3 class="modal-title">
+                    {{obj_ctrl.title_modal}} item
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid"
+                     style="background: white">
+                    <form name="formulario_crear_cargo">
+                        <div class="form-group row">
+
+                            <div class="col-md-12">
+                                <!--Upload information individually-->
+                                <!--Code commented for changes in the application-->
+                                <!--<div class="col-md-2">
+                                    <label class="control-label texto-titulos">
+                                        <input type="checkbox"
+                                               style="transform: scale(1.8); margin:5px"
+                                               ng-model="obj_data.sw_grupo"
+                                               class="ng-pristine ng-valid ng-touched"
+                                               ng-change="enableDisablePropertiesSwActive('sw_grupo', obj_data.sw_grupo)">
+                                        Grupo:
+                                    </label>
+                                    <select class="form-control"
+                                            ng-options=" opc.c_grupo as opc.d_grupo for opc in array_get_lista_criterios_grupos"
+                                            ng-model="obj_data.c_grupo"
+                                            ng-disabled="!obj_data.sw_grupo">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="control-label texto-titulos">
+                                        <input type="checkbox"
+                                               style="transform: scale(1.8); margin:5px"
+                                               ng-model="obj_data.sw_linea"
+                                               class="ng-pristine ng-valid ng-touched"
+                                               ng-change="enableDisablePropertiesSwActive('sw_linea', obj_data.sw_linea)">
+                                        Linea:
+                                    </label>
+                                    <select class="form-control"
+                                            ng-options=" opc.c_linea as opc.d_linea for opc in array_get_lista_criterios_lineas"
+                                            ng-model="obj_data.c_linea"
+                                            ng-disabled="!obj_data.sw_linea">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="control-label texto-titulos">
+                                        <input type="checkbox"
+                                               style="transform: scale(1.8); margin:5px"
+                                               ng-model="obj_data.sw_sublinea"
+                                               class="ng-pristine ng-valid ng-touched"
+                                               ng-change="enableDisablePropertiesSwActive('sw_sublinea', obj_data.sw_sublinea)">
+                                        Sublinea:
+                                    </label>
+                                    <select class="form-control"
+                                            ng-options=" opc.c_sublinea as opc.d_sublinea for opc in array_get_lista_criterios_sublineas"
+                                            ng-model="obj_data.c_sublinea"
+                                            ng-disabled="!obj_data.sw_sublinea">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>
+                                </div>-->
+
+                                <div class="col-md-5">
+                                    <label class="control-label texto-titulos">
+                                        <!--<input type="checkbox"
+                                        style="transform: scale(1.8); margin:5px"
+                                        ng-model="obj_data.sw_referencia"
+                                        class="ng-pristine ng-valid ng-touched"
+                                        ng-change="enableDisablePropertiesSwActive('sw_referencia', obj_data.sw_referencia)">-->
+                                        Referencia:
+                                    </label>
+                                    <!--<select class="form-control"
+                                            style="text-transform: uppercase"
+                                            ng-options=" opc.c_centro_operacion as opc.d_centro_operacion for opc in array_get_centros_operacion"
+                                            ng-model="obj_data.referencia"
+                                            ng-disabled="obj_ctrl.disableAll">
+                                        <option value="">
+                                            Seleccione
+                                        </option>
+                                    </select>-->
+                                    <input class="form-control"
+                                           style="text-transform: uppercase"
+                                           ng-model-options="{ debounce:{'default':1800 , 'blur' : 0} }"
+                                           ng-model="obj_data.referencia"
+                                           ng-change="get_producto_by_referencia(obj_data)"
+                                           ng-disabled="obj_ctrl.disableAll"
+                                           placeholder="Ingrese referencia">
+
+                                    <span style="font-size:x-small;color:gray">
+                                        {{obj_data.descripcion_referencia}}
+                                    </span>
+
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="control-label texto-titulos">
+                                        Dcto pdv:
+                                    </label>
+                                    <div class="input-group input-group"
+                                         style="margin-top:4px; margin-left:-5px">
+                                        <input id="txt_comision_sugerida_retail"
+                                               type="text" class="form-control"
+                                               style="text-align: right"
+                                               ng-model="obj_data.pj_dcto_pdv"
+                                               ng-model-options="{ debounce:{'default':500 , 'blur' : 0} }"
+                                               ng-change="validateMaximumDiscount()"
+                                               onlynumbers
+                                               ui-number-mask="0">
+                                        <span class="input-group-addon">%</span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="control-label texto-titulos">
+                                        Dcto corporativo:
+                                    </label>
+                                    <div class="input-group input-group"
+                                         style="margin-top:4px; margin-left:-5px">
+                                        <input id="txt_comision_sugerida_retail"
+                                               type="text" class="form-control"
+                                               style="text-align: right;"
+                                               ng-model="obj_data.pj_dcto_corporativo"
+                                               ng-model-options="{ debounce:{'default':500 , 'blur' : 0} }"
+                                               ng-change="validateMaximumDiscount()"
+                                               onlynumbers
+                                               ui-number-mask="0">
+                                        <span class="input-group-addon">%</span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1"
+                                     style="text-align:center">
+                                    <label class="control-label texto-titulos">
+                                        Activo:
+                                    </label>
+                                    <br />
+                                    <input type="checkbox"
+                                           style="transform: scale(2.5); margin:15px"
+                                           ng-model="obj_data.sw_activo"
+                                           class="ng-pristine ng-valid ng-touched"
+                                           ng-disabled="obj_ctrl.disable_swActivoData">
+                                </div>
+
+                            </div>
+
+                            <div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="align-center ">
+                            <div>
+                                <div style="text-align: center;"
+                                     tooltip-trigger="mouseenter"
+                                     tooltip-placement="top"
+                                     tooltip="Guardar">
+                                    <button ng-click="insert_validaciones_mayor_descuento()"
+                                            type="button"
+                                            class="hvr-glow btn btn-warning">
+                                        <span style="font-size: 17px;position: relative;text-align: -webkit-right;margin-top: 3px"
+                                              class="fa fa-floppy-o"></span>
+                                        <span style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;font-size: 16px;">
+                                            Guardar
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!--<button type="button"
+                                    class="hvr-glow btn btn-warning"
+                                    aria-label="Left Align"
+                                    style="background-color: #F68414;"
+                                    ng-click="closeModal();">
+                                <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px"
+                                      title=" Cerrar"
+                                      class="glyphicon glyphicon-minus-sign "
+                                      aria-hidden="false"></span>
+                                <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp Cancelar &nbsp&nbsp&nbsp&nbsp&nbsp
+                                </span>
+                            </button>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal"
+                        ng-click="cerrar_modal_insertar_bodega();">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

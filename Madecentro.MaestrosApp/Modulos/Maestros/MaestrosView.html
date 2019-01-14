@@ -1,0 +1,62 @@
+﻿<div class="container" style="background-color: white; box-shadow: rgba(0, 0, 0, 0.9) 1px 25px 45px; padding: 0;">
+    <div class="form-horizontal">
+        <div class="col-sm-2" style="text-align: center;padding: 0;">
+            <div class="panel-apps panel-default-apps">
+                <div class="panel-heading-apps font-madecentro" style="font-size: 20px;">App's</div>
+                <div class="panel-body-apps">
+                    
+                    <!--APLICACIONES-->
+                    <section>
+                        <div class="hi-icon-wrap hi-icon-effect-9 hi-icon-effect-9a" 
+                             style="padding-top: 0px;">
+                            <a class="hi-icon {{item.icon_class}}"
+                               ng-click="encabezado_selected(item)"
+                               ng-if="item.show_encabezado"
+                               ng-repeat="item in listEncabezadoMaestros" 
+                               style="font-size: 16px;">
+                                <div style="margin-top: 9px;">
+                                    <span class="font-madecentro">{{item.d_encabezado}}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10" style="text-align: center;padding-right: 0;">
+            <div class="panel-apps panel-default-apps">
+                <div class="panel-heading-apps font-madecentro" 
+                     style="font-size: 20px;">{{d_encabezado}}</div>
+                <div class="panel-body-apps">
+                    <section class="border-section animated fadeIn" 
+                             ng-if="listMaestrosEncabezado.length > 0">
+                        <div class="hi-icon-wrap hi-icon-effect-7 hi-icon-effect-7a" 
+                             style="padding-top: 0px; padding-bottom: 0px;">
+                            <a class="hi-icon {{opc.icon_class}}"
+                               ng-click="RedirectTo(opc.path);"
+                               ng-repeat="opc in listMaestrosEncabezado"
+                               ng-if="opc.show_maestro"
+                               tooltip="{{opc.text_tooltip}}"
+                               tooltip-placement="top" 
+                               tooltip-trigger="mouseenter"></a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+<div ng-show="Dialog" class="container-center ">
+    <div class="load-window">
+        <div class="outer-container" >
+            <div class="inner-container">
+                <div class="card-window animated fadeIn">
+
+                    <div ng-show="LoadingDialog">
+                        <div class="sk-cube-grid">
+                            <div class="sk-cube sk-cube1"></div>
+                            <div class="sk-cube sk-cube2"></div>
+                            <div class="sk-cube sk-cube3"></div>
+                            <div class="sk-cube sk-cube4"></div>
+                            <div class="sk-cube sk-cube5"></div>
+                            <div class="sk-cube sk-cube6"></div>
+                            <div class="sk-cube sk-cube7"></div>
+                            <div class="sk-cube sk-cube8"></div>
+                            <div class="sk-cube sk-cube9"></div>
+                        </div>
+                    </div>
+
+                    <p style="font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;">{{MsgText.value}}</p>
+
+                    <div ng-show="RedirectButton">
+                        <a ng-click="close()" class="submit-form-green margin-zero" href="{{linkRedirect}}">{{linkMgsRedirect}}</a>
+                    </div>
+
+                    <div ng-show="AccepButton" style="margin-left: 84px;width: 124px;">
+                        <!--<a href="javascript:;" class="submit-form-green margin-zero" ng-click="Hide()">Aceptar</a>-->
+                        <button type="button" class="submit-form-green btn-sm" style="    background-color: #FFFFFF;width: 100%;margin-bottom: 0px;" aria-label="Left Align" ng-click="Hide()">
+                            <span style="font-size: 16px;position: relative;font-weight: 700;">
+                                <label style="  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;cursor: pointer; color: #656565; font-size: 18px;">&nbsp;Aceptar</label>
+                            </span>
+                        </button>
+                    </div>
+
+                    <div ng-show="ButtonYesNo">
+                        <a href="javascript:;" ng-click="SelectedConfirm(false);" class="submit-form-green small-stacked white-small">cancelar</a>
+                        <a href="javascript:;" ng-click="SelectedConfirm(true);" class="submit-form-green small-stacked">continuar</a>
+                    </div>
+
+                    <div ng-show="CancelButton">
+                        <a class="submit-form-green margin-zero" href="javascript:;" ng-click="Apagar()">Cancelar</a>
+                    </div>
+
+                    <div class="clearing"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,229 @@
+﻿<!---- =============================================
+-- Author:		<Elkin Gutierrez Crespo>
+--              <24/08/2016>
+-- Description:	<App Gestion Cargos>
+-- Compañia:    <Madecentro Colombia S.A.S >
+-- =============================================-->
+
+<div class="container-fluid" style="background: white">
+    <br />
+    <h3 align="center" class="panel-heading-apps font-madecentro ng-binding">Gestión Sedes PDV</h3>
+
+    <div class=" col-xs-offset-1 col-xs-10 col-sm-offset-3 col-sm-4 col-md-offset-4 col-md-6 col-lg-offset-4 col-lg-4 align-center" ng-hide="show_co==1">
+        <div class="col-md-12 row contenedor-DescripcionTicket" style="margin-bottom:20px; margin-top:20px">
+            <div class="align-center col-md-offset-2 col-md-8">
+                <label class="texto-titulos label_required">Centro de operación:</label>
+                <select id="select_co" class="form-control" ng_model="obj_buscar_centro_operacion.c_centro_operacion" ng-click="consultar_co()" ng-change="buscar_centro_operacion()" autofocus="autofocus">
+                    <option value="" disabled selected hidden>Seleccione CO...</option>
+                    <option ng-repeat="items in array_consultar_co" ng-selected="items.selected" value="{{items.c_centro_operacion}}">{{items.d_centro_operacion}}</option>
+                </select>
+                <br /><br />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-lg-8" ng-show="show_datos_pdv ==1">
+        <br />
+        <div class="col-md-12 contenedor-DescripcionTicket">
+            <form id="form_pdv" class="form-search row" method="get">
+                <div>
+                    <div class="col-md-12 ">
+                        <div class="input-append col-xs-8 col-sm-6 ">
+                            <br />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="col-xs-12 col-sm-12 col-md-2 control-label texto-titulos align-center">
+                            <br />
+                            <label class="texto-titulos">Activo:</label>
+                            <br />
+                            <input type="checkbox" name="chk_activo" id="sw_activo" style="transform: scale(1.8)" ng-model="obj_buscar_centro_operacion.sw_activo" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-10">
+                            <br />
+                            <label class="texto-titulos label_required">CO - Nombre Punto de Venta:</label>
+                            <input disabled="disabled" id="txt_co"class="form-control ng-pristine ng-invalid ng-invalid-required" style="text-transform: uppercase" name="nombre_centro_operacion" ng-model="obj_buscar_centro_operacion.d_centro_operacion" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <br />
+                            <label class="texto-titulos">Clasificación PDV:</label>
+                            <select id="txt_clasificacion_pdv" class="form-control ng-pristine ng-invalid ng-invalid-required" ng-model="obj_buscar_centro_operacion.clasificacion_pv">
+                                <option value="">Selecione...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 ">
+                            <br />
+                                <label class="texto-titulos">Correo Administrador</label>
+                            <div class="form-group">
+                                <input ng-change="validar()"
+                                       ng-model="obj_buscar_centro_operacion.correo_administrador"
+                                       ng-model-options="{ debounce:{'default':500 , 'blur' : 0} }"
+                                       class="form-control ng-pristine ng-invalid ng-invalid-required"
+                                       type="email"
+                                       style="text-transform: lowercase"
+                                       name="email_administrador"
+                                       id="email_administrador"/>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <br />
+                            <label class="texto-titulos label_required">IP Pública:</label>
+                            <input class="form-control ng-pristine ng-invalid ng-invalid-required" style="" id="id_ip" name="ip" maxlength='15' ng-model="obj_buscar_centro_operacion.ip_publica"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <br />
+                            <label class="texto-titulos">Conector UnoEE:</label>
+                            <input class="form-control ng-pristine ng-invalid ng-invalid-required" name="txt_conector_unoe" ng-model="obj_buscar_centro_operacion.conector_unoe" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <br />
+                            <label class="texto-titulos">Usuario caja UnoEE:</label>
+                            <input class="form-control ng-pristine ng-invalid ng-invalid-required" name="txt_caja_siesa_usuario" ng-model=" obj_buscar_centro_operacion.caja_siesa_usuario" />
+
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <br />
+                            <label class="texto-titulos">Clave caja UnoEE:</label>
+                            <input class="form-control ng-pristine ng-invalid ng-invalid-required" name="txt_caja_siesa_clave" ng-model="obj_buscar_centro_operacion.caja_siesa_clave" />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <br />
+            </form>
+            <br />
+        </div>
+    </div>
+
+    <div class="col-md-8 col-lg-2 " ng-show="show_prefijos_facturacion ==1">
+        <br />
+        <div class="contenedor-DescripcionTicket ">
+            <form class="form-search row" method="get">
+                <div class="col-md-12 text-center texto-titulos">
+                    <br />
+                    <label class="texto-titulos">Prefijos de Facturación</label>
+                    <br />
+                    <br />
+                </div>
+                <br />
+                <div class="col-md-12">
+                    <br />
+                    <label class="texto-titulos">Factura crédito:</label>
+                    <input class="form-control ng-pristine ng-invalid ng-invalid-required" style="text-transform: uppercase" maxlength="3" name="nombre_centro_operacion" ng-model="obj_buscar_centro_operacion.prefijo_factura_credito" />
+                </div>
+                <div class=" col-md-12">
+                    <br />
+                    <label class="texto-titulos">Factura contado:</label>
+                    <input class="form-control ng-pristine ng-invalid ng-invalid-required" style="text-transform: uppercase" maxlength="3" name="nombre_centro_operacion" ng-model="obj_buscar_centro_operacion.prefijo_factura_contado" />
+                </div>
+                <div class="col-md-12">
+                    <br />
+                    <label class="texto-titulos">Factura manual:</label>
+                    <input class="form-control ng-pristine ng-invalid ng-invalid-required" style="text-transform: uppercase" maxlength="3" name="nombre_centro_operacion" ng-model="obj_buscar_centro_operacion.prefijo_factura_manual" />
+                    <br />
+                    <br />
+                    <br />
+
+                </div>
+            </form>
+            <br />
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-4 col-lg-2" ng-show="show_permisos ==1">
+        <br />
+        <div class="contenedor-DescripcionTicket">
+
+            <form class="row" name="formulario_Permisos">
+                <br />
+                <div class="align-center">
+                    <label class="control-label texto-titulos text-center" style="text-align: center">Permisos</label>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+                <div class=" align-center">
+                    <div class="checkbox" name="chk_cobrar_corte">
+
+                        <label class="control-label texto-titulos">
+                            <input type="checkbox" value="" style="transform: scale(1.8)" ng-model="obj_buscar_centro_operacion.sw_cobrar_corte">
+                            Facturar corte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                    </div>
+                    <div class="checkbox" name="chk_media_lamina">
+                        <label class="control-label texto-titulos">
+                            <input type="checkbox" value="" style="transform: scale(1.8)" ng-model="obj_buscar_centro_operacion.sw_cobrar_medio_tablero">
+                            Facturar 1/2 Lámina
+                        </label>
+                    </div>
+                    <div class="checkbox" name="chk_cuarto_lamina">
+                        <label class="control-label texto-titulos">
+                            <input type="checkbox" value="" style="transform: scale(1.8)" ng-model="obj_buscar_centro_operacion.sw_cobrar_un_cuarto_tablero">
+                            Facturar 1/4 Lámina
+                        </label>
+                    </div>
+                    <div class="checkbox" name="chk_tres_cuartos_lamina">
+                        <label class="control-label texto-titulos">
+                            <input type="checkbox" value="" style="transform: scale(1.8)" ng-model="obj_buscar_centro_operacion.sw_cobrar_tres_cuarto_tablero">
+                            Facturar 3/4 Lámina
+                        </label>
+                    </div>
+                    <br />
+
+                    <div class="text-center">
+                        <br />
+                        <label class="control-label texto-titulos text-center">
+                            Orientación optimización lepton
+                            <select class="form-control ng-pristine ng-invalid ng-invalid-required" placeholder="Selecione" ng-options="opc.orientacion_optimizacion as opc.d_orientacion_tablero_lepton for opc in array_consultar_optimizacion" ng-model="obj_buscar_centro_operacion.orientacion_optimizacion"></select>
+                        </label>
+                        <br /><br /><br /><br />
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class=" padding-row-form align-center col-md-12" ng-show="show_btn ==1">
+        <br />
+        <button type="button" class="hvr-glow btn btn-warning" aria-label="left Align" ng-click="actualizar_sedes()" style="background: #f68414">
+            <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title="CrearCargo" class="glyphicon glyphicon-floppy-disk" aria-hidden="false">
+            </span>
+            <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Guardar</span>
+        </button>
+        <button type="button" class="hvr-glow btn btn-warning" aria-label="Left Align" style="background-color: #F68414;" ng-click="limpiar_consulta();">
+            <span style="font-size: 17px; position: relative; text-align: -webkit-right; margin-top: 3px" title=" Cerrar" class="glyphicon glyphicon-minus-sign " aria-hidden="false"></span>
+            <span style="font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; font-size: 16px;">Cancelar</span>
+        </button>
+        <br /><br /><br />
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
